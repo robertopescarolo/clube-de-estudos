@@ -176,6 +176,7 @@
     <p>Escolha uma matéria para começar a estudar.</p>
     <button class="subject-choice" id="open-science" type="button">Ciências</button>
     <button class="subject-choice" id="open-english" type="button">Inglês</button>
+    <button class="subject-choice" id="open-portuguese" type="button">Português</button>
     <p id="subject-feedback" aria-live="polite"></p>
   </section>
   <div class="game-shell hidden-screen" id="science-game">
@@ -202,6 +203,19 @@
       <div class="mission-tabs" id="english-mission-tabs"></div>
       <div class="progress-line" aria-label="English mission progress"><div class="progress-fill" id="english-progress-fill"></div></div>
       <section class="question-card" id="english-question-card" aria-live="polite"></section>
+    </main>
+  </div>
+  <div class="game-shell hidden-screen" id="portuguese-game">
+    <header>
+      <div class="pixel-badge">A Z</div>
+      <button class="home-button" id="back-home-portuguese" type="button" aria-label="Voltar para matérias">⌂</button>
+      <div><h1>MISSÃO PORTUGUÊS</h1><p class="subtitle">Leia com atenção e descubra os poderes das palavras!</p></div>
+      <div class="score-box"><strong id="portuguese-stars">0</strong><span>ESTRELAS</span></div>
+    </header>
+    <main>
+      <div class="mission-tabs" id="portuguese-mission-tabs"></div>
+      <div class="progress-line" aria-label="Progresso de Português"><div class="progress-fill" id="portuguese-progress-fill"></div></div>
+      <section class="question-card" id="portuguese-question-card" aria-live="polite"></section>
     </main>
   </div>
 
@@ -620,9 +634,114 @@
       document.querySelector('#english-restart').addEventListener('click', () => { englishMissionIndex = 0; englishQuestionIndex = 0; englishStars = 0; englishStarDisplay.textContent = englishStars; renderEnglishTabs(); renderEnglishQuestion(); });
     }
 
+    const portugueseMissions = [
+      { name: 'Missão 1: Relatos e Tempo', questions: [
+        { q: 'Um relato pessoal é um texto em que a pessoa...', options: ['conta algo que viveu', 'ensina uma receita', 'vende um produto', 'inventa uma regra'], answer: 0, tip: 'No relato pessoal, quem escreve conta uma experiência que viveu.' },
+        { q: 'Qual frase parece um relato pessoal?', options: ['Ontem, eu visitei minha avó.', 'Compre frutas no mercado.', 'Não pise na grama.', 'O leão mora na floresta.'], answer: 0, tip: 'A frase usa “eu” e conta uma experiência da pessoa.' },
+        { q: 'Na frase “Primeiro arrumei a mochila. Depois fui à escola”, qual palavra marca tempo?', options: ['Depois', 'Mochila', 'Escola', 'Arrumei'], answer: 0, tip: '“Primeiro” e “depois” ajudam a organizar a ordem dos acontecimentos.' },
+        { q: 'Qual palavra completa melhor: “____ eu tomei café. Em seguida, escovei os dentes.”?', options: ['Primeiro', 'Nunca', 'Azul', 'Porém'], answer: 0, tip: '“Primeiro” mostra o acontecimento que veio antes.' },
+        { q: 'Qual palavra indica que uma ação aconteceu antes?', options: ['Ontem', 'Amanhã', 'Sempre', 'Aqui'], answer: 0, tip: '“Ontem” indica um tempo que já passou.' },
+        { q: 'Qual sequência está em ordem?', options: ['Primeiro, depois, por fim', 'Depois, primeiro, por fim', 'Por fim, primeiro, depois', 'Amanhã, azul, feliz'], answer: 0, tip: 'Marcadores de tempo ajudam o leitor a entender a ordem.' },
+        { q: 'Em um relato pessoal, quem normalmente é o narrador?', options: ['A pessoa que viveu a experiência', 'Um anúncio de loja', 'Um cartaz', 'Um dicionário'], answer: 0, tip: 'O narrador conta o que aconteceu com ele ou ela.' }
+      ]},
+      { name: 'Missão 2: Sinônimos e Antônimos', questions: [
+        { q: 'Qual palavra é sinônimo de “feliz”?', options: ['Alegre', 'Triste', 'Frio', 'Lento'], answer: 0, tip: 'Sinônimos são palavras com sentidos parecidos. Feliz e alegre têm sentido parecido.' },
+        { q: 'Qual palavra é sinônimo de “bonito”?', options: ['Belo', 'Feio', 'Escuro', 'Pequeno'], answer: 0, tip: 'Bonito e belo têm sentidos parecidos.' },
+        { q: 'Qual palavra é antônimo de “alto”?', options: ['Baixo', 'Grande', 'Forte', 'Rápido'], answer: 0, tip: 'Antônimos são palavras com sentidos contrários. Alto e baixo são opostos.' },
+        { q: 'Qual palavra é antônimo de “claro”?', options: ['Escuro', 'Brilhante', 'Limpo', 'Azul'], answer: 0, tip: 'Claro e escuro têm sentidos contrários.' },
+        { q: 'Qual palavra forma o contrário de “feliz”?', options: ['Infeliz', 'Desfeliz', 'Refeliz', 'Antifeliz'], answer: 0, tip: 'O prefixo “in-” pode formar uma palavra com sentido contrário: infeliz.' },
+        { q: 'Qual palavra forma o contrário de “ligado”?', options: ['Desligado', 'Religado', 'Iligado', 'Ligadão'], answer: 0, tip: 'O prefixo “des-” pode indicar o contrário: ligado / desligado.' },
+        { q: 'Qual palavra forma o contrário de “possível”?', options: ['Impossível', 'Despossível', 'Reposssível', 'Possívelmente'], answer: 0, tip: 'Antes de “p”, o prefixo “in-” muda para “im-”: impossível.' },
+        { q: 'Qual dupla tem palavras de sentidos contrários?', options: ['Entrar e sair', 'Feliz e contente', 'Bonito e belo', 'Rápido e veloz'], answer: 0, tip: 'Entrar e sair são antônimos.' }
+      ]},
+      { name: 'Missão 3: Os Sons do C', questions: [
+        { q: 'Em qual palavra a letra C tem som de /k/?', options: ['Casa', 'Cedo', 'Cinto', 'Círculo'], answer: 0, tip: 'Antes de A, O e U, o C tem som de /k/: casa, cola e cubo.' },
+        { q: 'Em qual palavra a letra C tem som de /s/?', options: ['Cenoura', 'Copo', 'Cama', 'Cubo'], answer: 0, tip: 'Antes de E e I, o C tem som de /s/: cedo, cinema e cenoura.' },
+        { q: 'Complete: C + A tem som de...', options: ['/k/, como em casa', '/s/, como em cedo', '/x/, como em xícara', '/z/, como em zebra'], answer: 0, tip: 'CA tem som de /k/, como em casa.' },
+        { q: 'Complete: C + E tem som de...', options: ['/s/, como em cedo', '/k/, como em casa', '/ch/, como em chuva', '/l/, como em lua'], answer: 0, tip: 'CE tem som de /s/, como em cedo.' },
+        { q: 'Qual palavra está escrita corretamente?', options: ['Cidade', 'Sidade', 'Kidade', 'Cydade'], answer: 0, tip: 'Cidade começa com C + I, que tem som de /s/.' },
+        { q: 'Qual palavra pertence ao grupo CA, CO ou CU?', options: ['Cubo', 'Cinto', 'Cedo', 'Cereja'], answer: 0, tip: 'Cubo começa com CU. Nesse grupo, o C tem som de /k/.' },
+        { q: 'Qual palavra pertence ao grupo CE ou CI?', options: ['Cinema', 'Cama', 'Copo', 'Cubo'], answer: 0, tip: 'Cinema começa com CI. Nesse grupo, o C tem som de /s/.' }
+      ]},
+      { name: 'Missão 4: Frases Bem Escritas', questions: [
+        { q: 'Qual frase começa corretamente?', options: ['Hoje eu vou brincar.', 'hoje eu vou brincar.', 'hoje Eu vou brincar.', 'HOJE eu vou brincar.'], answer: 0, tip: 'Uma frase começa com letra maiúscula.' },
+        { q: 'Qual frase termina corretamente?', options: ['O cachorro latiu.', 'O cachorro latiu', 'O cachorro latiu,', 'O cachorro latiu?'], answer: 0, tip: 'O ponto final mostra que uma ideia foi concluída.' },
+        { q: 'Qual nome próprio deve começar com maiúscula?', options: ['Mariana', 'cidade', 'menino', 'escola'], answer: 0, tip: 'Nomes de pessoas são nomes próprios e começam com letra maiúscula.' },
+        { q: 'Qual frase está escrita corretamente?', options: ['Pedro mora em Recife.', 'pedro mora em recife.', 'Pedro mora em recife.', 'pedro mora em Recife.'], answer: 0, tip: 'A frase e os nomes próprios Pedro e Recife começam com maiúscula.' },
+        { q: 'Depois do ponto final, a próxima palavra deve começar com...', options: ['letra maiúscula', 'letra minúscula sempre', 'número', 'vírgula'], answer: 0, tip: 'Depois do ponto, começamos uma nova frase com letra maiúscula.' },
+        { q: 'Onde colocamos o ponto final?', options: ['No fim de uma ideia completa', 'No começo de uma palavra', 'No meio de todo nome', 'Antes de uma letra maiúscula'], answer: 0, tip: 'O ponto final encerra uma frase declarativa.' },
+        { q: 'Qual é um nome comum?', options: ['cachorro', 'Brasil', 'Ana', 'João'], answer: 0, tip: 'Cachorro é um nome comum. Brasil, Ana e João são nomes próprios.' }
+      ]},
+      { name: 'Missão 5: Cartaz e Convivência', questions: [
+        { q: 'Um cartaz de arrecadação serve para...', options: ['convidar pessoas a doar', 'contar uma aventura longa', 'dar uma receita', 'ensinar uma dança'], answer: 0, tip: 'O cartaz usa palavras e imagens para convidar as pessoas a ajudar.' },
+        { q: 'Qual frase combina com um cartaz de arrecadação?', options: ['Doe brinquedos e faça uma criança feliz!', 'Era uma vez um castelo.', 'Minha família viajou ontem.', 'A girafa é alta.'], answer: 0, tip: 'Um cartaz de campanha faz um convite ou pedido claro.' },
+        { q: 'O que não pode faltar em um cartaz de campanha?', options: ['Uma mensagem clara sobre o que doar', 'Um capítulo de livro', 'Muitas frases sem assunto', 'Uma conta de matemática'], answer: 0, tip: 'O leitor precisa entender rapidamente qual ajuda é necessária.' },
+        { q: 'Qual regra ajuda a boa convivência?', options: ['Respeitar as diferenças', 'Zombar dos colegas', 'Gritar para vencer', 'Invadir o espaço do outro'], answer: 0, tip: 'Respeitar as diferenças ajuda todas as pessoas a conviverem bem.' },
+        { q: 'Quando alguém fala, o que é melhor fazer?', options: ['Ouvir com atenção', 'Interromper sempre', 'Rir da pessoa', 'Virar as costas'], answer: 0, tip: 'Ouvir com atenção mostra respeito.' },
+        { q: 'Qual atitude mostra honestidade?', options: ['Dizer a verdade', 'Esconder o que aconteceu', 'Culpar outra pessoa', 'Pegar algo sem pedir'], answer: 0, tip: 'Ser honesto é agir com verdade.' },
+        { q: 'Se dois colegas querem o mesmo brinquedo, uma boa solução é...', options: ['combinar de revezar', 'brigar pelo brinquedo', 'esconder o brinquedo', 'gritar mais alto'], answer: 0, tip: 'Conversar e revezar ajuda a resolver conflitos com respeito.' },
+        { q: 'Qual é uma regra de convivência?', options: ['Não invadir o espaço do outro', 'Empurrar na fila', 'Não ouvir ninguém', 'Fazer bagunça de propósito'], answer: 0, tip: 'Respeitar o espaço do outro é uma regra importante.' }
+      ]}
+    ];
+
+    let portugueseMissionIndex = 0;
+    let portugueseQuestionIndex = 0;
+    let portugueseStars = 0;
+    let portugueseAnswered = false;
+    const portugueseTabs = document.querySelector('#portuguese-mission-tabs');
+    const portugueseCard = document.querySelector('#portuguese-question-card');
+    const portugueseStarDisplay = document.querySelector('#portuguese-stars');
+    const portugueseProgress = document.querySelector('#portuguese-progress-fill');
+
+    function renderPortugueseTabs() {
+      portugueseTabs.innerHTML = `<button class="mission-tab" id="portuguese-study-guide">Guia de Estudo</button>${portugueseMissions.map((mission, index) => `<button class="mission-tab ${index === portugueseMissionIndex ? 'active' : ''}" data-portuguese-mission="${index}">${mission.name}</button>`).join('')}`;
+      document.querySelector('#portuguese-study-guide').addEventListener('click', renderPortugueseStudyGuide);
+      portugueseTabs.querySelectorAll('[data-portuguese-mission]').forEach(button => button.addEventListener('click', () => { portugueseMissionIndex = Number(button.dataset.portugueseMission); portugueseQuestionIndex = 0; renderPortugueseTabs(); renderPortugueseQuestion(); }));
+    }
+
+    function renderPortugueseStudyGuide() {
+      portugueseProgress.style.width = '0%';
+      portugueseCard.innerHTML = `<p class="topic">GUIA DE ESTUDO</p><h2>O que preciso saber?</h2><p><strong>Relato pessoal:</strong> quem escreve conta uma experiência que viveu. Use marcadores de tempo: ontem, primeiro, depois, por fim.</p><p><strong>Sinônimos:</strong> palavras de sentido parecido, como feliz e alegre. <strong>Antônimos:</strong> palavras de sentido contrário, como entrar e sair. Prefixos <strong>des-</strong> e <strong>in-/im-</strong> também podem formar contrários.</p><p><strong>Letra C:</strong> C + A, O, U tem som de /k/; C + E, I tem som de /s/.</p><p><strong>Frases:</strong> começam com letra maiúscula e terminam com ponto final. Nomes próprios também usam maiúscula.</p><p><strong>Cartazes e convivência:</strong> cartazes de arrecadação fazem pedidos claros. Conviver bem é respeitar, ouvir, ser honesto e cuidar do espaço do outro.</p><button class="next-button" id="back-to-portuguese">Voltar às missões</button>`;
+      document.querySelector('#back-to-portuguese').addEventListener('click', renderPortugueseQuestion);
+    }
+
+    function renderPortugueseQuestion() {
+      portugueseAnswered = false;
+      const mission = portugueseMissions[portugueseMissionIndex];
+      const question = mission.questions[portugueseQuestionIndex];
+      const shuffledOptions = question.options.map((option, index) => ({ option, index })).sort(() => Math.random() - 0.5);
+      portugueseProgress.style.width = `${(portugueseQuestionIndex / mission.questions.length) * 100}%`;
+      portugueseCard.innerHTML = `<p class="topic">${mission.name.toUpperCase()}</p><span class="question-number">${portugueseQuestionIndex + 1} / ${mission.questions.length}</span><h2>${question.q}</h2><div class="answers">${shuffledOptions.map(({ option, index }, displayIndex) => `<button class="answer" data-portuguese-answer="${index}"><span class="answer-key">${String.fromCharCode(65 + displayIndex)}</span>${option}</button>`).join('')}</div><p class="feedback" id="portuguese-feedback"></p><button class="next-button hidden" id="portuguese-next-button">Próxima pergunta</button>`;
+      portugueseCard.querySelectorAll('.answer').forEach(button => button.addEventListener('click', () => choosePortugueseAnswer(Number(button.dataset.portugueseAnswer))));
+    }
+
+    function choosePortugueseAnswer(selected) {
+      if (portugueseAnswered) return;
+      portugueseAnswered = true;
+      const question = portugueseMissions[portugueseMissionIndex].questions[portugueseQuestionIndex];
+      const options = portugueseCard.querySelectorAll('.answer');
+      const feedback = document.querySelector('#portuguese-feedback');
+      options.forEach(option => { option.disabled = true; if (Number(option.dataset.portugueseAnswer) === question.answer) option.classList.add('correct'); });
+      if (selected === question.answer) { portugueseStars++; portugueseStarDisplay.textContent = portugueseStars; feedback.textContent = 'Acertou! Você ganhou uma estrela.'; feedback.className = 'feedback good'; }
+      else { Array.from(options).find(option => Number(option.dataset.portugueseAnswer) === selected).classList.add('wrong'); feedback.textContent = `Quase! ${question.tip}`; feedback.className = 'feedback bad'; }
+      document.querySelector('#portuguese-next-button').classList.remove('hidden');
+      document.querySelector('#portuguese-next-button').addEventListener('click', nextPortugueseQuestion);
+    }
+
+    function nextPortugueseQuestion() {
+      const mission = portugueseMissions[portugueseMissionIndex];
+      if (portugueseQuestionIndex < mission.questions.length - 1) { portugueseQuestionIndex++; renderPortugueseQuestion(); return; }
+      if (portugueseMissionIndex < portugueseMissions.length - 1) { portugueseMissionIndex++; portugueseQuestionIndex = 0; renderPortugueseTabs(); renderPortugueseQuestion(); return; }
+      const total = portugueseMissions.reduce((count, missionItem) => count + missionItem.questions.length, 0);
+      portugueseProgress.style.width = '100%';
+      portugueseCard.innerHTML = `<div class="result"><div class="trophy">★</div><p class="topic">MISSÃO CONCLUÍDA</p><h2>Parabéns, mestre das palavras!</h2><p>Você conquistou ${portugueseStars} de ${total} estrelas.</p><button class="restart-button" id="portuguese-restart">Jogar novamente</button></div>`;
+      document.querySelector('#portuguese-restart').addEventListener('click', () => { portugueseMissionIndex = 0; portugueseQuestionIndex = 0; portugueseStars = 0; portugueseStarDisplay.textContent = portugueseStars; renderPortugueseTabs(); renderPortugueseQuestion(); });
+    }
+
     const subjectSelector = document.querySelector('.subject-selector');
     const scienceGame = document.querySelector('#science-game');
     const englishGame = document.querySelector('#english-game');
+    const portugueseGame = document.querySelector('#portuguese-game');
     const subjectFeedback = document.querySelector('#subject-feedback');
     document.querySelector('#open-science').addEventListener('click', () => {
       subjectSelector.classList.add('hidden-screen');
@@ -637,15 +756,26 @@
       subjectSelector.classList.add('hidden-screen');
       englishGame.classList.remove('hidden-screen');
     });
+    document.querySelector('#open-portuguese').addEventListener('click', () => {
+      subjectFeedback.textContent = '';
+      subjectSelector.classList.add('hidden-screen');
+      portugueseGame.classList.remove('hidden-screen');
+    });
     document.querySelector('#back-home-english').addEventListener('click', () => {
       subjectSelector.classList.remove('hidden-screen');
       englishGame.classList.add('hidden-screen');
+    });
+    document.querySelector('#back-home-portuguese').addEventListener('click', () => {
+      subjectSelector.classList.remove('hidden-screen');
+      portugueseGame.classList.add('hidden-screen');
     });
 
     renderTabs();
     renderQuestion();
     renderEnglishTabs();
     renderEnglishQuestion();
+    renderPortugueseTabs();
+    renderPortugueseQuestion();
   </script>
 </body>
 </html>
