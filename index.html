@@ -369,13 +369,24 @@
       { title: 'Frases Bem Escritas', text: 'Toda frase começa com letra maiúscula e, quando a ideia termina, usamos ponto final. Nomes próprios, como Ana, Pedro e Recife, também começam com letra maiúscula. Nomes comuns, como menino e cidade, normalmente usam minúscula.' },
       { title: 'Cartaz e Convivência', text: 'Um cartaz de arrecadação chama as pessoas para ajudar. Ele precisa ter uma mensagem curta, clara e um pedido, como “Doe brinquedos”. Para conviver bem, devemos respeitar as diferenças, ouvir, dizer a verdade e cuidar do espaço das outras pessoas.' },
       { title: 'Linha do Tempo', text: 'Os marcadores de tempo mostram a ordem dos fatos em uma história ou relato. “Primeiro” apresenta o começo. “Depois” ou “em seguida” mostra o que aconteceu a seguir. “Por fim” indica o encerramento.' },
-      { title: 'Desafio do C', text: 'Para descobrir o som do C, observe a vogal que vem depois. Em CA, CO e CU, o som é /k/. Em CE e CI, o som é /s/. Leia as palavras devagar e perceba o som da primeira sílaba.' }
+      { title: 'Desafio do C', text: 'Para descobrir o som do C, observe a vogal que vem depois. Em CA, CO e CU, o som é /k/. Em CE e CI, o som é /s/. Leia as palavras devagar e perceba o som da primeira sílaba.' },
+      { title: 'Mais atividades de leitura', text: 'Revise marcadores de tempo, sinônimos, antônimos, os sons da letra C, frases com maiúscula e ponto final, cartazes e atitudes de boa convivência.' }
     ];
 
     missions.push({ name: 'Missão 13: Atividades do Material', questions: [
       { q: 'Uma colher é usada para mexer uma sopa quente. Qual material combina melhor com a parte que toca a sopa?', options: ['Metal', 'Papel', 'Algodão', 'Gelo'], answer: 0, tip: 'O metal é resistente e pode aquecer; por isso é usado em utensílios de cozinha.' },
       { q: 'Em um teste, a água atravessou o tecido, mas não atravessou o plástico. Qual material é impermeável?', options: ['Plástico', 'Tecido', 'Os dois', 'Nenhum dos dois'], answer: 0, tip: 'Impermeável significa não deixar a água passar.' },
       { q: 'Uma caixa de papelão usada foi para a coleta seletiva. De que matéria-prima ela veio?', options: ['Madeira', 'Areia', 'Metal', 'Argila'], answer: 0, tip: 'O papel é produzido a partir da madeira, de origem vegetal.' }
+    ]});
+    missions.push({ name: 'Missão 14: Mais atividades do livro', questions: [
+      { q: 'Qual material é mais adequado para uma capa de chuva?', options: ['Plástico impermeável', 'Papel absorvente', 'Lã furada', 'Esponja'], answer: 0, tip: 'A capa de chuva precisa impedir a passagem da água.' },
+      { q: 'Uma janela limpa deixa a luz passar e permite enxergar o outro lado. O vidro é...', options: ['Transparente', 'Opaco', 'Magnético', 'Absorvente'], answer: 0, tip: 'Materiais transparentes deixam a luz passar.' },
+      { q: 'Qual objeto costuma atrair peças de ferro?', options: ['Ímã', 'Régua de madeira', 'Copo de vidro', 'Folha de papel'], answer: 0, tip: 'O ímã atrai alguns metais, como o ferro.' },
+      { q: 'A água atravessou um filtro com areia e ficou mais limpa. Esse processo é...', options: ['Filtração', 'Derretimento', 'Magnetismo', 'Congelamento'], answer: 0, tip: 'Na filtração, o filtro retém parte do material sólido.' },
+      { q: 'Água com açúcar bem misturada parece igual em todo o copo. É uma mistura...', options: ['Homogênea', 'Heterogênea', 'Sólida', 'Magnética'], answer: 0, tip: 'Uma mistura homogênea tem aparência uniforme.' },
+      { q: 'Em uma salada, podemos ver o tomate, a alface e a cenoura. É uma mistura...', options: ['Heterogênea', 'Homogênea', 'Pura', 'Gasosa'], answer: 0, tip: 'Uma mistura heterogênea mostra partes diferentes.' },
+      { q: 'Qual atitude ajuda a reaproveitar materiais?', options: ['Separar papel, plástico, metal e vidro', 'Misturar todo o lixo', 'Jogar latas no rio', 'Queimar garrafas'], answer: 0, tip: 'Separar materiais facilita a coleta seletiva e a reciclagem.' },
+      { q: 'Uma toalha seca a água porque é um material...', options: ['Absorvente', 'Impermeável', 'Transparente', 'Magnético'], answer: 0, tip: 'Materiais absorventes conseguem puxar e guardar parte da água.' }
     ]});
 
     const totalQuestions = missions.reduce((total, mission) => total + (mission.questions || mission.items).length, 0);
@@ -634,6 +645,16 @@
       { q: 'Sand and water are mixed. Which method separates the sand from the water?', image: englishScene('mixture', 'BOOK ACTIVITY', 'SAND + WATER'), alt: 'Mixture experiment', options: ['filtration', 'magnetism', 'distillation', 'mixing'], answer: 0, tip: 'A filter keeps the sand and lets the water pass.' },
       { q: 'Rice and beans are together in a bowl. This is a...', image: englishScene('mixture', 'BOOK ACTIVITY', 'RICE + BEANS'), alt: 'Heterogeneous mixture', options: ['heterogeneous mixture', 'homogeneous mixture', 'pure substance', 'manufactured material'], answer: 0, tip: 'We can see the different parts in a heterogeneous mixture.' }
     ]});
+    englishMissions.push({ name: 'Mission 8: More Book Practice', questions: [
+      { q: 'A towel takes water in. It is...', options: ['absorbent', 'waterproof', 'transparent', 'magnetic'], answer: 0, tip: 'Absorbent materials take in water.' },
+      { q: 'A window lets light pass through. It is...', options: ['transparent', 'rough', 'absorbent', 'opaque'], answer: 0, tip: 'Transparent materials let light pass through.' },
+      { q: 'Which object can attract iron nails?', options: ['a magnet', 'a paper sheet', 'a glass cup', 'a wooden ruler'], answer: 0, tip: 'A magnet can attract some metals, such as iron.' },
+      { q: 'Sugar water looks the same all through the glass. It is a...', options: ['homogeneous mixture', 'heterogeneous mixture', 'pure metal', 'solid object'], answer: 0, tip: 'A homogeneous mixture looks uniform.' },
+      { q: 'A salad has parts that we can see. It is a...', options: ['heterogeneous mixture', 'homogeneous mixture', 'pure substance', 'transparent material'], answer: 0, tip: 'A heterogeneous mixture has visible different parts.' },
+      { q: 'Which method separates sand from water?', options: ['filtration', 'magnetism', 'evaporation only', 'mixing'], answer: 0, tip: 'Filtration uses a filter to keep the sand.' },
+      { q: 'Which word describes a raincoat?', options: ['waterproof', 'absorbent', 'fragile', 'magnetic'], answer: 0, tip: 'A raincoat needs to stop water from passing through.' },
+      { q: 'Which action helps recycling?', options: ['separating materials', 'mixing all rubbish', 'throwing glass in the river', 'burning plastic'], answer: 0, tip: 'Separating materials helps collection and recycling.' }
+    ]});
 
     let englishMissionIndex = 0;
     let englishQuestionIndex = 0;
@@ -784,6 +805,16 @@
       { q: 'Leia: “Ontem eu fui ao parque. Depois andei de bicicleta.” Qual é o marcador de tempo?', options: ['Depois', 'Parque', 'Bicicleta', 'Andei'], answer: 0, tip: 'Depois mostra quando aconteceu a segunda ação.' },
       { q: 'Qual frase está pronta para um cartaz de arrecadação?', options: ['Doe alimentos. Ajude uma família!', 'ontem fui ao parque', 'cachorro correu', 'eu gosto de brincar'], answer: 0, tip: 'O cartaz deve ter uma mensagem clara e um pedido de ajuda.' },
       { q: 'Qual frase foi reescrita corretamente?', options: ['Maria visitou Salvador.', 'maria visitou salvador.', 'Maria visitou salvador', 'maria visitou Salvador'], answer: 0, tip: 'A frase e os nomes próprios começam com maiúscula; a ideia termina com ponto.' }
+    ]});
+    portugueseMissions.push({ name: 'Missão 10: Mais atividades de leitura', questions: [
+      { q: 'Leia: “Primeiro lavei as mãos. Depois preparei o lanche.” Qual palavra mostra a ordem?', options: ['Depois', 'Mãos', 'Lanche', 'Preparei'], answer: 0, tip: 'Depois indica a ação que aconteceu em seguida.' },
+      { q: 'Qual palavra é sinônimo de feliz?', options: ['Alegre', 'Triste', 'Longe', 'Pequeno'], answer: 0, tip: 'Feliz e alegre têm sentidos parecidos.' },
+      { q: 'Qual é o antônimo de entrar?', options: ['Sair', 'Chegar', 'Correr', 'Olhar'], answer: 0, tip: 'Entrar e sair indicam ações contrárias.' },
+      { q: 'Em qual palavra a letra C tem som de /k/?', options: ['Casa', 'Cedo', 'Cidade', 'Cinema'], answer: 0, tip: 'Antes de A, O e U, o C tem som de /k/.' },
+      { q: 'Em qual palavra a letra C tem som de /s/?', options: ['Cenoura', 'Cavalo', 'Copo', 'Cubo'], answer: 0, tip: 'Antes de E e I, o C tem som de /s/.' },
+      { q: 'Qual frase está escrita corretamente?', options: ['Pedro joga bola.', 'pedro joga bola.', 'Pedro joga bola', 'pedro joga bola'], answer: 0, tip: 'A frase começa com maiúscula e termina com ponto.' },
+      { q: 'Qual mensagem combina com um cartaz de doação?', options: ['Doe livros. Ajude a escola!', 'ontem choveu', 'o menino corre', 'gosto de azul'], answer: 0, tip: 'Um cartaz de doação faz um pedido claro.' },
+      { q: 'Qual atitude ajuda na convivência?', options: ['Ouvir e respeitar', 'Empurrar os colegas', 'Zombar das diferenças', 'Pegar sem pedir'], answer: 0, tip: 'Ouvir e respeitar ajudam as pessoas a conviver.' }
     ]});
     portugueseSummaries.push(
       { title: 'Leitura Visual', text: 'Cartazes usam letras grandes e mensagens curtas para chamar atenção. Leia a mensagem, procure o pedido principal e observe se as frases começam com maiúscula e terminam com ponto.' },
@@ -942,6 +973,16 @@
       { q: 'A feira da cidade acontece no sábado. Em qual instrumento você pode marcar essa data?', options: ['Calendário', 'Semáforo', 'Rádio', 'Bicicleta'], answer: 0, tip: 'O calendário ajuda a organizar datas e compromissos.' },
       { q: 'Uma família cria galinhas para vender ovos. Esse trabalho é de...', options: ['Pecuária', 'Indústria', 'Extrativismo', 'Comunicação'], answer: 0, tip: 'Criar animais faz parte da pecuária.' },
       { q: 'Você quer avisar sua avó que chegou bem em casa. Qual meio de comunicação pode usar?', options: ['Telefone', 'Ônibus', 'Faixa de pedestres', 'Calendário'], answer: 0, tip: 'O telefone permite que as pessoas conversem a distância.' }
+    ]});
+    historyGeoMissions.push({ name: 'Capítulo 8: Mais atividades do livro', summary: 'Revise tempo, campo e cidade, transporte, comunicação, trânsito e cuidados com o ambiente.', questions: [
+      { q: 'Qual instrumento organiza os meses e os dias do ano?', options: ['Calendário', 'Semáforo', 'Rádio', 'Bicicleta'], answer: 0, tip: 'O calendário mostra dias, semanas e meses.' },
+      { q: 'Qual trabalho retira produtos diretamente da natureza?', options: ['Extrativismo', 'Pecuária', 'Comunicação', 'Transporte'], answer: 0, tip: 'Extrativismo é retirar recursos da natureza.' },
+      { q: 'Qual transporte circula sobre trilhos?', options: ['Trem', 'Barco', 'Avião', 'Bicicleta'], answer: 0, tip: 'O trem se desloca sobre trilhos.' },
+      { q: 'Para atravessar a rua com segurança, devemos usar...', options: ['Faixa de pedestres', 'O meio da rua', 'A calçada do outro lado sem olhar', 'A pista dos carros'], answer: 0, tip: 'A faixa ajuda o pedestre a atravessar com segurança.' },
+      { q: 'Qual meio de comunicação envia uma mensagem escrita rapidamente?', options: ['Celular', 'Ônibus', 'Trator', 'Semáforo'], answer: 0, tip: 'O celular pode enviar mensagens para outras pessoas.' },
+      { q: 'Qual atitude protege os rios?', options: ['Não jogar lixo na água', 'Jogar óleo no ralo', 'Despejar plástico no rio', 'Deixar a torneira aberta'], answer: 0, tip: 'Não jogar lixo ou produtos poluentes protege a água.' },
+      { q: 'Qual produto costuma ser produzido em uma fábrica?', options: ['Móvel', 'Leite na fazenda', 'Peixe do rio', 'Fruta no pomar'], answer: 0, tip: 'A indústria transforma materiais e fabrica produtos.' },
+      { q: 'Quando a luz do semáforo está vermelha, o pedestre deve...', options: ['Esperar e observar', 'Correr para atravessar', 'Brincar na rua', 'Ignorar os carros'], answer: 0, tip: 'A luz vermelha indica que é preciso parar e esperar.' }
     ]});
 
     let historyGeoMissionIndex = 0, historyGeoQuestionIndex = 0, historyGeoStars = 0, historyGeoAnswered = false;
