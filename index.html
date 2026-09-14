@@ -319,6 +319,16 @@
       ]}
     ];
 
+    const portugueseSummaries = [
+      { title: 'Relatos e Tempo', text: 'Um relato pessoal conta algo que aconteceu de verdade com quem escreve. Geralmente usa “eu” e fala dos sentimentos e das ações da pessoa. Para deixar os fatos organizados, usamos marcadores de tempo: ontem, primeiro, depois, em seguida e por fim.' },
+      { title: 'Sinônimos e Antônimos', text: 'Sinônimos são palavras com sentido parecido: feliz e alegre. Antônimos têm sentido contrário: entrar e sair. Alguns contrários são formados com prefixos: ligado vira desligado; feliz vira infeliz; possível vira impossível.' },
+      { title: 'Os Sons do C', text: 'A letra C pode ter dois sons. Antes de A, O e U, ela tem som de /k/: casa, copo e cubo. Antes de E e I, ela tem som de /s/: cedo, cidade e cinema.' },
+      { title: 'Frases Bem Escritas', text: 'Toda frase começa com letra maiúscula e, quando a ideia termina, usamos ponto final. Nomes próprios, como Ana, Pedro e Recife, também começam com letra maiúscula. Nomes comuns, como menino e cidade, normalmente usam minúscula.' },
+      { title: 'Cartaz e Convivência', text: 'Um cartaz de arrecadação chama as pessoas para ajudar. Ele precisa ter uma mensagem curta, clara e um pedido, como “Doe brinquedos”. Para conviver bem, devemos respeitar as diferenças, ouvir, dizer a verdade e cuidar do espaço das outras pessoas.' },
+      { title: 'Linha do Tempo', text: 'Os marcadores de tempo mostram a ordem dos fatos em uma história ou relato. “Primeiro” apresenta o começo. “Depois” ou “em seguida” mostra o que aconteceu a seguir. “Por fim” indica o encerramento.' },
+      { title: 'Desafio do C', text: 'Para descobrir o som do C, observe a vogal que vem depois. Em CA, CO e CU, o som é /k/. Em CE e CI, o som é /s/. Leia as palavras devagar e perceba o som da primeira sílaba.' }
+    ];
+
     const totalQuestions = missions.reduce((total, mission) => total + (mission.questions || mission.items).length, 0);
     let missionIndex = 0;
     let questionIndex = 0;
@@ -704,13 +714,20 @@
     function renderPortugueseTabs() {
       portugueseTabs.innerHTML = `<button class="mission-tab" id="portuguese-study-guide">Guia de Estudo</button>${portugueseMissions.map((mission, index) => `<button class="mission-tab ${index === portugueseMissionIndex ? 'active' : ''}" data-portuguese-mission="${index}">${mission.name}</button>`).join('')}`;
       document.querySelector('#portuguese-study-guide').addEventListener('click', renderPortugueseStudyGuide);
-      portugueseTabs.querySelectorAll('[data-portuguese-mission]').forEach(button => button.addEventListener('click', () => { portugueseMissionIndex = Number(button.dataset.portugueseMission); portugueseQuestionIndex = 0; renderPortugueseTabs(); renderPortugueseQuestion(); }));
+      portugueseTabs.querySelectorAll('[data-portuguese-mission]').forEach(button => button.addEventListener('click', () => { portugueseMissionIndex = Number(button.dataset.portugueseMission); portugueseQuestionIndex = 0; renderPortugueseTabs(); renderPortugueseLesson(); }));
+    }
+
+    function renderPortugueseLesson() {
+      const summary = portugueseSummaries[portugueseMissionIndex];
+      portugueseProgress.style.width = '0%';
+      portugueseCard.innerHTML = `<p class="topic">CAPÍTULO ${portugueseMissionIndex + 1}</p><h2>${summary.title}</h2><p class="feedback good">Leia antes de jogar.</p><p>${summary.text}</p><button class="next-button" id="start-portuguese-mission">Começar missão</button>`;
+      document.querySelector('#start-portuguese-mission').addEventListener('click', renderPortugueseQuestion);
     }
 
     function renderPortugueseStudyGuide() {
       portugueseProgress.style.width = '0%';
       portugueseCard.innerHTML = `<p class="topic">GUIA DE ESTUDO</p><h2>O que preciso saber?</h2><p><strong>Relato pessoal:</strong> quem escreve conta uma experiência que viveu. Use marcadores de tempo: ontem, primeiro, depois, por fim.</p><p><strong>Sinônimos:</strong> palavras de sentido parecido, como feliz e alegre. <strong>Antônimos:</strong> palavras de sentido contrário, como entrar e sair. Prefixos <strong>des-</strong> e <strong>in-/im-</strong> também podem formar contrários.</p><p><strong>Letra C:</strong> C + A, O, U tem som de /k/; C + E, I tem som de /s/.</p><p><strong>Frases:</strong> começam com letra maiúscula e terminam com ponto final. Nomes próprios também usam maiúscula.</p><p><strong>Cartazes e convivência:</strong> cartazes de arrecadação fazem pedidos claros. Conviver bem é respeitar, ouvir, ser honesto e cuidar do espaço do outro.</p><button class="next-button" id="back-to-portuguese">Voltar às missões</button>`;
-      document.querySelector('#back-to-portuguese').addEventListener('click', renderPortugueseQuestion);
+      document.querySelector('#back-to-portuguese').addEventListener('click', renderPortugueseLesson);
     }
 
     function renderPortugueseQuestion() {
@@ -749,7 +766,7 @@
     function nextPortugueseQuestion() {
       const mission = portugueseMissions[portugueseMissionIndex];
       if (portugueseQuestionIndex < mission.questions.length - 1) { portugueseQuestionIndex++; renderPortugueseQuestion(); return; }
-      if (portugueseMissionIndex < portugueseMissions.length - 1) { portugueseMissionIndex++; portugueseQuestionIndex = 0; renderPortugueseTabs(); renderPortugueseQuestion(); return; }
+      if (portugueseMissionIndex < portugueseMissions.length - 1) { portugueseMissionIndex++; portugueseQuestionIndex = 0; renderPortugueseTabs(); renderPortugueseLesson(); return; }
       showPortugueseResult();
     }
 
@@ -757,7 +774,7 @@
       const total = portugueseMissions.reduce((count, missionItem) => count + (missionItem.questions || missionItem.items).length, 0);
       portugueseProgress.style.width = '100%';
       portugueseCard.innerHTML = `<div class="result"><div class="trophy">★</div><p class="topic">MISSÃO CONCLUÍDA</p><h2>Parabéns, mestre das palavras!</h2><p>Você conquistou ${portugueseStars} de ${total} estrelas.</p><button class="restart-button" id="portuguese-restart">Jogar novamente</button></div>`;
-      document.querySelector('#portuguese-restart').addEventListener('click', () => { portugueseMissionIndex = 0; portugueseQuestionIndex = 0; portugueseStars = 0; portugueseStarDisplay.textContent = portugueseStars; renderPortugueseTabs(); renderPortugueseQuestion(); });
+      document.querySelector('#portuguese-restart').addEventListener('click', () => { portugueseMissionIndex = 0; portugueseQuestionIndex = 0; portugueseStars = 0; portugueseStarDisplay.textContent = portugueseStars; renderPortugueseTabs(); renderPortugueseLesson(); });
     }
 
     const subjectSelector = document.querySelector('.subject-selector');
@@ -797,7 +814,7 @@
     renderEnglishTabs();
     renderEnglishQuestion();
     renderPortugueseTabs();
-    renderPortugueseQuestion();
+    renderPortugueseLesson();
   </script>
 </body>
 </html>
