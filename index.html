@@ -461,15 +461,23 @@
     }
 
     const englishReferencePhotos = {
+      car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Grey_toy_car.jpg?width=960',
       brick: 'https://upload.wikimedia.org/wikipedia/commons/d/d1/Brick_wall_close-up_view.jpg',
       boots: 'https://upload.wikimedia.org/wikipedia/commons/d/d2/Rain_boots_on_Stairs.jpg',
-      magnet: 'https://upload.wikimedia.org/wikipedia/commons/6/62/Magnetic_influence_in_paperclip.jpg'
+      magnet: 'https://upload.wikimedia.org/wikipedia/commons/6/62/Magnetic_influence_in_paperclip.jpg',
+      plastic: 'https://commons.wikimedia.org/wiki/Special:FilePath/Colorful_plastic_building_blocks_scattered_on_a_table.jpg?width=960',
+      wood: 'https://commons.wikimedia.org/wiki/Special:FilePath/Old_wooden_table_with_flower_-_extract.jpg?width=960',
+      paper: 'https://commons.wikimedia.org/wiki/Special:FilePath/Paper_notebooks.jpg?width=960',
+      sponge: 'https://commons.wikimedia.org/wiki/Special:FilePath/Sponge-for-washing-1212612.jpg?width=960',
+      gloves: 'https://commons.wikimedia.org/wiki/Special:FilePath/Butyl_rubber_gloves.JPG?width=960',
+      pillow: 'https://commons.wikimedia.org/wiki/Special:FilePath/Decorative_pillows_on_a_leather_sofa.jpg?width=960',
+      spring: 'https://commons.wikimedia.org/wiki/Special:FilePath/Metal_spring_20050521.jpg?width=960',
+      window: 'https://commons.wikimedia.org/wiki/Special:FilePath/View_of_a_frosty_evening_through_a_window_on_a_Scottish_farm.jpg?width=960'
     };
 
     function englishScene(kind, title, label) {
-      if (kind === 'brick') return englishReferencePhotos.brick;
-      if (kind === 'boots') return englishReferencePhotos.boots;
-      if (kind === 'mixture' && label.includes('MAGNET')) return englishReferencePhotos.magnet;
+      if (englishReferencePhotos[kind]) return englishReferencePhotos[kind];
+      if (kind === 'mixture') return englishReferencePhotos.magnet;
       const scenes = {
         brick: '<rect x="115" y="110" width="410" height="150" fill="#b96b4c"/><path d="M115 160h410M115 210h410M185 110v50M315 110v50M445 110v50M250 160v50M380 160v50" stroke="#fff0c5" stroke-width="10"/>',
         gloves: '<path d="M217 257V132c0-16 21-16 21 0v57V96c0-16 22-16 22 0v88V82c0-16 22-16 22 0v102V99c0-16 22-16 22 0v88l20-38c10-17 33-3 22 15l-42 84c-15 30-87 34-87 9z" fill="#ffc835" stroke="#18304b" stroke-width="10"/>',
@@ -566,7 +574,7 @@
 
     function renderEnglishStudyGuide() {
       englishProgress.style.width = '0%';
-      englishCard.innerHTML = `<p class="topic">ENGLISH REFERENCE</p><h2>Study Guide: Materials and Mixtures</h2><p class="feedback good">Materials: brick, plastic, wood, paper, glass and metal.</p><p><strong>Properties:</strong> rough / smooth, absorbent / waterproof, soft / hard, flexible / rigid.</p><p><strong>Origins:</strong> Natural materials come from nature. Manufactured materials are made by people.</p><p><strong>Mixtures:</strong> Pure means one substance. Homogeneous looks the same. Heterogeneous has parts we can see.</p><p><strong>Separate mixtures:</strong> filtration, evaporation, distillation and magnetism. A magnet attracts metal.</p><p>Photo credits: <a href="https://commons.wikimedia.org/wiki/File:Brick_wall_close-up_view.jpg" target="_blank">Brick wall, Pawel Wozniak, CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Rain_boots_on_Stairs.jpg" target="_blank">Rain boots, Erikamthompson, CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Magnetic_influence_in_paperclip.jpg" target="_blank">Magnet and paper clip, Waifer X, CC BY 2.0</a>.</p><button class="next-button" id="back-to-english">Back to missions</button>`;
+      englishCard.innerHTML = `<p class="topic">ENGLISH REFERENCE</p><h2>Study Guide: Materials and Mixtures</h2><p class="feedback good">Materials: brick, plastic, wood, paper, glass and metal.</p><p><strong>Properties:</strong> rough / smooth, absorbent / waterproof, soft / hard, flexible / rigid.</p><p><strong>Origins:</strong> Natural materials come from nature. Manufactured materials are made by people.</p><p><strong>Mixtures:</strong> Pure means one substance. Homogeneous looks the same. Heterogeneous has parts we can see.</p><p><strong>Separate mixtures:</strong> filtration, evaporation, distillation and magnetism. A magnet attracts metal.</p><p>Open-photo sources and licence details: <a href="https://commons.wikimedia.org/wiki/File:Brick_wall_close-up_view.jpg" target="_blank">brick wall</a>, <a href="https://commons.wikimedia.org/wiki/File:Rain_boots_on_Stairs.jpg" target="_blank">rain boots</a>, <a href="https://commons.wikimedia.org/wiki/File:Magnetic_influence_in_paperclip.jpg" target="_blank">magnet</a>, and the Wikimedia Commons file pages linked by each photo.</p><button class="next-button" id="back-to-english">Back to missions</button>`;
       document.querySelector('#back-to-english').addEventListener('click', renderEnglishQuestion);
     }
 
