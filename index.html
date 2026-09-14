@@ -177,6 +177,7 @@
     <button class="subject-choice" id="open-science" type="button">Ciências</button>
     <button class="subject-choice" id="open-english" type="button">Inglês</button>
     <button class="subject-choice" id="open-portuguese" type="button">Português</button>
+    <button class="subject-choice" id="open-history-geo" type="button">História e Geografia</button>
     <p id="subject-feedback" aria-live="polite"></p>
   </section>
   <div class="game-shell hidden-screen" id="science-game">
@@ -216,6 +217,19 @@
       <div class="mission-tabs" id="portuguese-mission-tabs"></div>
       <div class="progress-line" aria-label="Progresso de Português"><div class="progress-fill" id="portuguese-progress-fill"></div></div>
       <section class="question-card" id="portuguese-question-card" aria-live="polite"></section>
+    </main>
+  </div>
+  <div class="game-shell hidden-screen" id="history-geo-game">
+    <header>
+      <div class="pixel-badge">⌚</div>
+      <button class="home-button" id="back-home-history-geo" type="button" aria-label="Voltar para matérias">⌂</button>
+      <div><h1>HISTÓRIA & GEOGRAFIA</h1><p class="subtitle">Descubra como as pessoas vivem, trabalham e cuidam do mundo!</p></div>
+      <div class="score-box"><strong id="history-geo-stars">0</strong><span>ESTRELAS</span></div>
+    </header>
+    <main>
+      <div class="mission-tabs" id="history-geo-mission-tabs"></div>
+      <div class="progress-line" aria-label="Progresso de História e Geografia"><div class="progress-fill" id="history-geo-progress-fill"></div></div>
+      <section class="question-card" id="history-geo-question-card" aria-live="polite"></section>
     </main>
   </div>
 
@@ -777,10 +791,48 @@
       document.querySelector('#portuguese-restart').addEventListener('click', () => { portugueseMissionIndex = 0; portugueseQuestionIndex = 0; portugueseStars = 0; portugueseStarDisplay.textContent = portugueseStars; renderPortugueseTabs(); renderPortugueseLesson(); });
     }
 
+    const historyGeoMissions = [
+      { name: 'Capítulo 1: Tempo', summary: 'O relógio ajuda a organizar as atividades do dia, como acordar, estudar, brincar e dormir. O calendário organiza os dias, semanas, meses e anos. As pessoas criaram calendários para planejar festas, trabalhos e compromissos da comunidade.', questions: [
+        { q: 'Para que usamos o relógio?', options: ['Para organizar os horários', 'Para plantar uma árvore', 'Para atravessar a rua', 'Para escrever uma carta'], answer: 0, tip: 'O relógio mostra as horas e ajuda a organizar o dia.' },
+        { q: 'Qual atividade costuma acontecer primeiro no dia?', options: ['Acordar', 'Dormir à noite', 'Jantar', 'Voltar da escola'], answer: 0, tip: 'O dia começa quando acordamos.' },
+        { q: 'Qual atividade pode acontecer depois da escola?', options: ['Fazer a lição', 'Acordar', 'Tomar café da manhã', 'Dormir antes de acordar'], answer: 0, tip: 'Depois da escola, podemos fazer a lição, brincar ou descansar.' },
+        { q: 'O que o calendário organiza?', options: ['Dias, meses e anos', 'Apenas cores', 'Só brinquedos', 'Somente ruas'], answer: 0, tip: 'O calendário nos ajuda a saber as datas.' },
+        { q: 'Por que as comunidades usam calendários?', options: ['Para planejar a vida e os acontecimentos', 'Para mudar o clima', 'Para apagar o passado', 'Para parar o tempo'], answer: 0, tip: 'Calendários ajudam as pessoas a se organizar.' },
+        { q: 'Qual vem depois de segunda-feira?', options: ['Terça-feira', 'Domingo', 'Janeiro', 'Manhã'], answer: 0, tip: 'Na semana, terça-feira vem depois de segunda-feira.' },
+        { q: 'Qual marca uma data no calendário?', options: ['O dia do aniversário', 'A cor de uma mochila', 'O tamanho de um lápis', 'O som da campainha'], answer: 0, tip: 'Podemos marcar no calendário aniversários e outros eventos importantes.' }
+      ]},
+      { name: 'Capítulo 2: Trabalho e Natureza', summary: 'Trabalho é toda atividade que as pessoas fazem para produzir, cuidar, ensinar, transportar ou prestar serviços. Existem trabalhos agropecuários, extrativos e industriais. A água e o solo são importantes para a vida e devem ser usados com cuidado, sem desperdício e sem poluição.', questions: [
+        { q: 'O que é trabalho?', options: ['Uma atividade feita para produzir ou prestar serviços', 'Só brincar no parque', 'Ficar sem fazer nada', 'Apenas usar um celular'], answer: 0, tip: 'Muitas pessoas trabalham produzindo coisas ou ajudando a comunidade.' },
+        { q: 'Quem planta milho ou cria animais trabalha em uma atividade...', options: ['agropecuária', 'industrial', 'de trânsito', 'de comunicação'], answer: 0, tip: 'A agropecuária envolve agricultura e criação de animais.' },
+        { q: 'Retirar madeira ou minerais da natureza é atividade...', options: ['extrativa', 'agropecuária', 'esportiva', 'artística'], answer: 0, tip: 'Atividades extrativas retiram recursos da natureza.' },
+        { q: 'Transformar matéria-prima em produtos em uma fábrica é atividade...', options: ['industrial', 'extrativa', 'de lazer', 'de calendário'], answer: 0, tip: 'A indústria transforma matérias-primas em produtos.' },
+        { q: 'Qual atitude cuida da água?', options: ['Fechar a torneira ao escovar os dentes', 'Deixar a torneira aberta', 'Jogar lixo no rio', 'Lavar a calçada com muita mangueira'], answer: 0, tip: 'Economizar água ajuda a cuidar desse recurso importante.' },
+        { q: 'Qual atitude protege o solo?', options: ['Não jogar lixo no chão', 'Queimar todo o lixo', 'Derramar óleo na terra', 'Arrancar todas as plantas'], answer: 0, tip: 'O lixo pode poluir o solo.' },
+        { q: 'Por que o trabalho é importante para a sociedade?', options: ['Porque atende às necessidades das pessoas', 'Porque todos precisam fazer a mesma profissão', 'Porque substitui a escola', 'Porque acaba com a natureza'], answer: 0, tip: 'Os trabalhos ajudam a produzir alimentos, casas, roupas, cuidados e serviços.' }
+      ]},
+      { name: 'Capítulo 3: Caminhos e Cuidados', summary: 'Os meios de transporte levam pessoas e mercadorias de um lugar a outro. Os meios de comunicação permitem trocar informações. Sinais de trânsito ajudam motoristas, ciclistas e pedestres a circular com segurança. Na internet, nunca devemos conversar com desconhecidos, compartilhar dados pessoais ou clicar em links estranhos.', questions: [
+        { q: 'Qual é um meio de transporte?', options: ['Ônibus', 'Telefone', 'Calendário', 'Semáforo'], answer: 0, tip: 'O ônibus transporta pessoas de um lugar para outro.' },
+        { q: 'Qual é um meio de comunicação?', options: ['Rádio', 'Bicicleta', 'Faixa de pedestres', 'Relógio'], answer: 0, tip: 'O rádio transmite informações e notícias.' },
+        { q: 'Para que servem os sinais de trânsito?', options: ['Para organizar o trânsito e evitar acidentes', 'Para decorar as ruas', 'Para marcar aniversários', 'Para escolher trabalhos'], answer: 0, tip: 'Os sinais orientam todos que usam as ruas.' },
+        { q: 'O que significa o sinal vermelho do semáforo?', options: ['Pare', 'Acelere', 'Brinque', 'Atravesse correndo'], answer: 0, tip: 'O vermelho pede para parar.' },
+        { q: 'Onde o pedestre deve atravessar quando há faixa?', options: ['Na faixa de pedestres', 'No meio da rua', 'Entre carros parados', 'Em qualquer lugar correndo'], answer: 0, tip: 'A faixa é um local mais seguro para atravessar.' },
+        { q: 'Na internet, o que devemos fazer se um desconhecido pedir nosso endereço?', options: ['Não responder e avisar um adulto', 'Enviar o endereço', 'Mandar uma foto da casa', 'Continuar a conversa sozinho'], answer: 0, tip: 'Dados pessoais devem ser protegidos. Peça ajuda a um adulto.' },
+        { q: 'Qual cuidado é importante ao usar a internet?', options: ['Não clicar em links estranhos', 'Contar senhas para qualquer pessoa', 'Falar com desconhecidos sem avisar', 'Aceitar todos os pedidos'], answer: 0, tip: 'Links estranhos podem levar a sites perigosos.' }
+      ]}
+    ];
+    let historyGeoMissionIndex = 0, historyGeoQuestionIndex = 0, historyGeoStars = 0, historyGeoAnswered = false;
+    const historyGeoTabs = document.querySelector('#history-geo-mission-tabs'), historyGeoCard = document.querySelector('#history-geo-question-card'), historyGeoStarDisplay = document.querySelector('#history-geo-stars'), historyGeoProgress = document.querySelector('#history-geo-progress-fill');
+    function renderHistoryGeoTabs() { historyGeoTabs.innerHTML = historyGeoMissions.map((mission, index) => `<button class="mission-tab ${index === historyGeoMissionIndex ? 'active' : ''}" data-history-geo-mission="${index}">${mission.name}</button>`).join(''); historyGeoTabs.querySelectorAll('button').forEach(button => button.addEventListener('click', () => { historyGeoMissionIndex = Number(button.dataset.historyGeoMission); historyGeoQuestionIndex = 0; renderHistoryGeoTabs(); renderHistoryGeoLesson(); })); }
+    function renderHistoryGeoLesson() { const mission = historyGeoMissions[historyGeoMissionIndex]; historyGeoProgress.style.width = '0%'; historyGeoCard.innerHTML = `<p class="topic">LEIA E APRENDA</p><h2>${mission.name}</h2><p class="feedback good">Leia antes de jogar.</p><p>${mission.summary}</p><button class="next-button" id="start-history-geo">Começar missão</button>`; document.querySelector('#start-history-geo').addEventListener('click', renderHistoryGeoQuestion); }
+    function renderHistoryGeoQuestion() { historyGeoAnswered = false; const mission = historyGeoMissions[historyGeoMissionIndex], question = mission.questions[historyGeoQuestionIndex], shuffledOptions = question.options.map((option, index) => ({ option, index })).sort(() => Math.random() - 0.5); historyGeoProgress.style.width = `${(historyGeoQuestionIndex / mission.questions.length) * 100}%`; historyGeoCard.innerHTML = `<p class="topic">${mission.name.toUpperCase()}</p><span class="question-number">${historyGeoQuestionIndex + 1} / ${mission.questions.length}</span><h2>${question.q}</h2><div class="answers">${shuffledOptions.map(({ option, index }, displayIndex) => `<button class="answer" data-history-geo-answer="${index}"><span class="answer-key">${String.fromCharCode(65 + displayIndex)}</span>${option}</button>`).join('')}</div><p class="feedback" id="history-geo-feedback"></p><button class="next-button hidden" id="history-geo-next">Próxima pergunta</button>`; historyGeoCard.querySelectorAll('.answer').forEach(button => button.addEventListener('click', () => chooseHistoryGeoAnswer(Number(button.dataset.historyGeoAnswer)))); }
+    function chooseHistoryGeoAnswer(selected) { if (historyGeoAnswered) return; historyGeoAnswered = true; const question = historyGeoMissions[historyGeoMissionIndex].questions[historyGeoQuestionIndex], options = historyGeoCard.querySelectorAll('.answer'), feedback = document.querySelector('#history-geo-feedback'); options.forEach(option => { option.disabled = true; if (Number(option.dataset.historyGeoAnswer) === question.answer) option.classList.add('correct'); }); if (selected === question.answer) { historyGeoStars++; historyGeoStarDisplay.textContent = historyGeoStars; feedback.textContent = 'Acertou! Você ganhou uma estrela.'; feedback.className = 'feedback good'; } else { Array.from(options).find(option => Number(option.dataset.historyGeoAnswer) === selected).classList.add('wrong'); feedback.textContent = `Quase! ${question.tip}`; feedback.className = 'feedback bad'; } document.querySelector('#history-geo-next').classList.remove('hidden'); document.querySelector('#history-geo-next').addEventListener('click', nextHistoryGeoQuestion); }
+    function nextHistoryGeoQuestion() { const mission = historyGeoMissions[historyGeoMissionIndex]; if (historyGeoQuestionIndex < mission.questions.length - 1) { historyGeoQuestionIndex++; renderHistoryGeoQuestion(); return; } if (historyGeoMissionIndex < historyGeoMissions.length - 1) { historyGeoMissionIndex++; historyGeoQuestionIndex = 0; renderHistoryGeoTabs(); renderHistoryGeoLesson(); return; } const total = historyGeoMissions.reduce((count, mission) => count + mission.questions.length, 0); historyGeoProgress.style.width = '100%'; historyGeoCard.innerHTML = `<div class="result"><div class="trophy">★</div><p class="topic">MISSÃO CONCLUÍDA</p><h2>Você explorou História e Geografia!</h2><p>Você conquistou ${historyGeoStars} de ${total} estrelas.</p><button class="restart-button" id="history-geo-restart">Jogar novamente</button></div>`; document.querySelector('#history-geo-restart').addEventListener('click', () => { historyGeoMissionIndex = 0; historyGeoQuestionIndex = 0; historyGeoStars = 0; historyGeoStarDisplay.textContent = historyGeoStars; renderHistoryGeoTabs(); renderHistoryGeoLesson(); }); }
+
     const subjectSelector = document.querySelector('.subject-selector');
     const scienceGame = document.querySelector('#science-game');
     const englishGame = document.querySelector('#english-game');
     const portugueseGame = document.querySelector('#portuguese-game');
+    const historyGeoGame = document.querySelector('#history-geo-game');
     const subjectFeedback = document.querySelector('#subject-feedback');
     document.querySelector('#open-science').addEventListener('click', () => {
       subjectSelector.classList.add('hidden-screen');
@@ -800,6 +852,7 @@
       subjectSelector.classList.add('hidden-screen');
       portugueseGame.classList.remove('hidden-screen');
     });
+    document.querySelector('#open-history-geo').addEventListener('click', () => { subjectFeedback.textContent = ''; subjectSelector.classList.add('hidden-screen'); historyGeoGame.classList.remove('hidden-screen'); });
     document.querySelector('#back-home-english').addEventListener('click', () => {
       subjectSelector.classList.remove('hidden-screen');
       englishGame.classList.add('hidden-screen');
@@ -808,6 +861,7 @@
       subjectSelector.classList.remove('hidden-screen');
       portugueseGame.classList.add('hidden-screen');
     });
+    document.querySelector('#back-home-history-geo').addEventListener('click', () => { subjectSelector.classList.remove('hidden-screen'); historyGeoGame.classList.add('hidden-screen'); });
 
     renderTabs();
     renderQuestion();
@@ -815,6 +869,8 @@
     renderEnglishQuestion();
     renderPortugueseTabs();
     renderPortugueseLesson();
+    renderHistoryGeoTabs();
+    renderHistoryGeoLesson();
   </script>
 </body>
 </html>
