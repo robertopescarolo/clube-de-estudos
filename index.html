@@ -234,15 +234,35 @@
     </main>
   </div>
 
-  <section class="game-screen hidden-screen" id="math-game">
-    <button class="back-button" id="back-home-math" type="button">← Voltar aos assuntos</button>
-    <div class="game-header"><h1>Matemática</h1><div class="stars">★ <span id="math-stars">0</span></div></div>
-    <div class="mission-tabs" id="math-mission-tabs"></div>
-    <div class="progress-bar"><div class="progress-fill" id="math-progress-fill"></div></div>
-    <article class="question-card" id="math-question-card"></article>
-  </section>
+  <div class="game-shell hidden-screen" id="math-game">
+    <header>
+      <div class="pixel-badge">1 2 3</div>
+      <button class="home-button" id="back-home-math" type="button" aria-label="Voltar para matérias">⌂</button>
+      <div><h1>MISSÃO MATEMÁTICA</h1><p class="subtitle">Conte, calcule e descubra os poderes dos números!</p></div>
+      <div class="score-box"><strong id="math-stars">0</strong><span>ESTRELAS</span></div>
+    </header>
+    <main>
+      <div class="mission-tabs" id="math-mission-tabs"></div>
+      <div class="progress-line" aria-label="Progresso de Matemática"><div class="progress-fill" id="math-progress-fill"></div></div>
+      <section class="question-card" id="math-question-card" aria-live="polite"></section>
+    </main>
+  </div>
 
   <script>
+    function scienceVisual(question) {
+      const kind = /bicicleta|pneu/i.test(question) ? 'BICICLETA' : /chuva|galocha|água/i.test(question) ? 'CHUVA E ÁGUA' : /janela|vidro|transpar/i.test(question) ? 'JANELA DE VIDRO' : /elástico|mola|elastic/i.test(question) ? 'ELÁSTICO' : /panela|metal/i.test(question) ? 'PANELA' : /recic|lixeira/i.test(question) ? 'RECICLAGEM' : /areia|argila|tijolo/i.test(question) ? 'MATÉRIAS-PRIMAS' : 'MATERIAIS';
+      const drawings = {
+        'BICICLETA': '<circle cx="175" cy="175" r="58" fill="none" stroke="#244a79" stroke-width="11"/><circle cx="404" cy="175" r="58" fill="none" stroke="#244a79" stroke-width="11"/><path d="M175 175l90-92 76 92H175l90 0 47-80 92 80M258 82h70M296 70l-27-29" fill="none" stroke="#e95844" stroke-width="12" stroke-linejoin="round"/>',
+        'CHUVA E ÁGUA': '<path d="M135 80h250l-28 28H163z" fill="#ffd34f"/><path d="M260 107v102" stroke="#25436d" stroke-width="10"/><path d="M244 209h68v26h-68z" fill="#e95844"/><path d="M95 48v34M165 32v34M430 43v34M492 77v34" stroke="#58bfe1" stroke-width="10"/>',
+        'JANELA DE VIDRO': '<rect x="150" y="38" width="230" height="190" fill="#a9e9f5" stroke="#25436d" stroke-width="12"/><path d="M265 38v190M150 133h230" stroke="#fff" stroke-width="9"/><circle cx="205" cy="81" r="22" fill="#ffd34f"/><path d="M318 198v-62l28-36 28 36v62" fill="#65b95e"/>',
+        'ELÁSTICO': '<path d="M120 140h290" stroke="#e95875" stroke-width="24" stroke-linecap="round"/><path d="M120 140h290" stroke="#ffd9e6" stroke-width="5" stroke-dasharray="14 12"/><path d="M92 117h42v46H92zM397 117h42v46h-42z" fill="#f4b178" stroke="#25436d" stroke-width="7"/>',
+        'PANELA': '<path d="M145 82h190v86c0 40-28 55-95 55s-95-15-95-55z" fill="#aab9c4" stroke="#25436d" stroke-width="10"/><path d="M135 78h210v21H135z" fill="#e8f0f2" stroke="#25436d" stroke-width="8"/><path d="M335 117h105v38H335z" fill="#9b623f" stroke="#25436d" stroke-width="9"/><path d="M192 62c-18-22 10-28 0-48M240 62c-18-22 10-28 0-48M288 62c-18-22 10-28 0-48" fill="none" stroke="#fff" stroke-width="8"/>',
+        'RECICLAGEM': '<g stroke="#25436d" stroke-width="8"><path d="M105 97h76v110h-76z" fill="#e95757"/><path d="M218 97h76v110h-76z" fill="#ffd34f"/><path d="M331 97h76v110h-76z" fill="#62bd69"/></g><g fill="#fff" font-family="sans-serif" font-size="29" font-weight="900" text-anchor="middle"><text x="143" y="164">P</text><text x="256" y="164">M</text><text x="369" y="164">V</text></g>',
+        'MATÉRIAS-PRIMAS': '<path d="M100 210c0-102 145-102 145 0z" fill="#dcaf55" stroke="#25436d" stroke-width="8"/><path d="M305 70h54v56l34 42v67H271v-67l34-42z" fill="#a7e7ef" stroke="#25436d" stroke-width="9"/><path d="M438 89h56v126h-56z" fill="#b76d4d" stroke="#25436d" stroke-width="9"/>',
+        'MATERIAIS': '<rect x="115" y="83" width="92" height="92" fill="#70c7e1" stroke="#25436d" stroke-width="9"/><circle cx="304" cy="130" r="51" fill="#e95875" stroke="#25436d" stroke-width="9"/><path d="M410 85h83v95h-83z" fill="#a16a43" stroke="#25436d" stroke-width="9"/>'
+      };
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 260"><rect width="520" height="260" fill="#f3fbff"/><rect y="215" width="520" height="45" fill="#d5f0be"/>${drawings[kind]}<text x="260" y="244" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="800" fill="#25436d">${kind}</text></svg>`)}`;
+    }
     const missions = [
       { name: 'Missão 1: Objetos', questions: [
         { q: 'Uma garrafa pode ser feita de quais materiais?', options: ['Vidro ou plástico', 'Só madeira', 'Só algodão', 'Só papel'], answer: 0, tip: 'Um mesmo objeto pode ser fabricado com materiais diferentes. Existem garrafas de vidro e de plástico.' },
@@ -352,6 +372,12 @@
       { title: 'Desafio do C', text: 'Para descobrir o som do C, observe a vogal que vem depois. Em CA, CO e CU, o som é /k/. Em CE e CI, o som é /s/. Leia as palavras devagar e perceba o som da primeira sílaba.' }
     ];
 
+    missions.push({ name: 'Missão 13: Atividades do Material', questions: [
+      { q: 'Uma colher é usada para mexer uma sopa quente. Qual material combina melhor com a parte que toca a sopa?', options: ['Metal', 'Papel', 'Algodão', 'Gelo'], answer: 0, tip: 'O metal é resistente e pode aquecer; por isso é usado em utensílios de cozinha.' },
+      { q: 'Em um teste, a água atravessou o tecido, mas não atravessou o plástico. Qual material é impermeável?', options: ['Plástico', 'Tecido', 'Os dois', 'Nenhum dos dois'], answer: 0, tip: 'Impermeável significa não deixar a água passar.' },
+      { q: 'Uma caixa de papelão usada foi para a coleta seletiva. De que matéria-prima ela veio?', options: ['Madeira', 'Areia', 'Metal', 'Argila'], answer: 0, tip: 'O papel é produzido a partir da madeira, de origem vegetal.' }
+    ]});
+
     const totalQuestions = missions.reduce((total, mission) => total + (mission.questions || mission.items).length, 0);
     let missionIndex = 0;
     let questionIndex = 0;
@@ -375,11 +401,12 @@
       if (mission.game === 'origins') { renderOriginsGame(mission); return; }
       if (mission.game === 'materials') { renderMaterialsGame(mission); return; }
       const question = mission.questions[questionIndex];
+      const scienceImage = scienceVisual(question.q);
       const shuffledOptions = question.options
         .map((option, index) => ({ option, index }))
         .sort(() => Math.random() - 0.5);
       progress.style.width = `${((questionIndex) / mission.questions.length) * 100}%`;
-      card.innerHTML = `<p class="topic">${mission.name.toUpperCase()}</p><span class="question-number">${questionIndex + 1} / ${mission.questions.length}</span>${question.image ? `<img class="question-image" src="${question.image}" alt="${question.alt || 'Página do livro para observar'}">` : ''}<h2>${question.q}</h2><div class="answers">${shuffledOptions.map(({ option, index }, displayIndex) => `<button class="answer" data-answer="${index}"><span class="answer-key">${String.fromCharCode(65 + displayIndex)}</span>${option}</button>`).join('')}</div><p class="feedback" id="feedback"></p><button class="next-button hidden" id="next-button">Próxima pergunta</button>`;
+      card.innerHTML = `<p class="topic">${mission.name.toUpperCase()}</p><span class="question-number">${questionIndex + 1} / ${mission.questions.length}</span><img class="question-image" src="${scienceImage}" alt="Ilustração didática de ${question.q}"><h2>${question.q}</h2><div class="answers">${shuffledOptions.map(({ option, index }, displayIndex) => `<button class="answer" data-answer="${index}"><span class="answer-key">${String.fromCharCode(65 + displayIndex)}</span>${option}</button>`).join('')}</div><p class="feedback" id="feedback"></p><button class="next-button hidden" id="next-button">Próxima pergunta</button>`;
       card.querySelectorAll('.answer').forEach(button => button.addEventListener('click', () => chooseAnswer(Number(button.dataset.answer))));
     }
 
@@ -602,6 +629,12 @@
       ]}
     ];
 
+    englishMissions.push({ name: 'Mission 7: Book Activities', questions: [
+      { q: 'A child needs a material for a raincoat. Which word is best?', image: englishScene('boots', 'BOOK ACTIVITY', 'KEEP DRY'), alt: 'Rain boots', options: ['waterproof', 'absorbent', 'rough', 'soft'], answer: 0, tip: 'A raincoat needs to be waterproof so water cannot go through.' },
+      { q: 'Sand and water are mixed. Which method separates the sand from the water?', image: englishScene('mixture', 'BOOK ACTIVITY', 'SAND + WATER'), alt: 'Mixture experiment', options: ['filtration', 'magnetism', 'distillation', 'mixing'], answer: 0, tip: 'A filter keeps the sand and lets the water pass.' },
+      { q: 'Rice and beans are together in a bowl. This is a...', image: englishScene('mixture', 'BOOK ACTIVITY', 'RICE + BEANS'), alt: 'Heterogeneous mixture', options: ['heterogeneous mixture', 'homogeneous mixture', 'pure substance', 'manufactured material'], answer: 0, tip: 'We can see the different parts in a heterogeneous mixture.' }
+    ]});
+
     let englishMissionIndex = 0;
     let englishQuestionIndex = 0;
     let englishStars = 0;
@@ -747,6 +780,16 @@
       ]}
     ];
 
+    portugueseMissions.push({ name: 'Missão 9: Atividades de Leitura', questions: [
+      { q: 'Leia: “Ontem eu fui ao parque. Depois andei de bicicleta.” Qual é o marcador de tempo?', options: ['Depois', 'Parque', 'Bicicleta', 'Andei'], answer: 0, tip: 'Depois mostra quando aconteceu a segunda ação.' },
+      { q: 'Qual frase está pronta para um cartaz de arrecadação?', options: ['Doe alimentos. Ajude uma família!', 'ontem fui ao parque', 'cachorro correu', 'eu gosto de brincar'], answer: 0, tip: 'O cartaz deve ter uma mensagem clara e um pedido de ajuda.' },
+      { q: 'Qual frase foi reescrita corretamente?', options: ['Maria visitou Salvador.', 'maria visitou salvador.', 'Maria visitou salvador', 'maria visitou Salvador'], answer: 0, tip: 'A frase e os nomes próprios começam com maiúscula; a ideia termina com ponto.' }
+    ]});
+    portugueseSummaries.push(
+      { title: 'Leitura Visual', text: 'Cartazes usam letras grandes e mensagens curtas para chamar atenção. Leia a mensagem, procure o pedido principal e observe se as frases começam com maiúscula e terminam com ponto.' },
+      { title: 'Atividades de Leitura', text: 'Leia pequenos textos com atenção. Procure palavras que mostram tempo, reconheça mensagens de cartaz e revise se a frase começa com maiúscula, usa nomes próprios corretamente e termina com ponto final.' }
+    );
+
     let portugueseMissionIndex = 0;
     let portugueseQuestionIndex = 0;
     let portugueseStars = 0;
@@ -763,7 +806,10 @@
     }
 
     function renderPortugueseLesson() {
-      const summary = portugueseSummaries[portugueseMissionIndex];
+      const summary = portugueseSummaries[portugueseMissionIndex] || {
+        title: 'Leitura e Revisão',
+        text: 'Leia a pergunta com atenção, observe as imagens, procure o pedido principal e revise as regras de escrita, pontuação e tempo.'
+      };
       portugueseProgress.style.width = '0%';
       portugueseCard.innerHTML = `<p class="topic">CAPÍTULO ${portugueseMissionIndex + 1}</p><h2>${summary.title}</h2><p class="feedback good">Leia antes de jogar.</p><p>${summary.text}</p><button class="next-button" id="start-portuguese-mission">Começar missão</button>`;
       document.querySelector('#start-portuguese-mission').addEventListener('click', renderPortugueseQuestion);
@@ -778,6 +824,11 @@
     function renderPortugueseQuestion() {
       portugueseAnswered = false;
       const mission = portugueseMissions[portugueseMissionIndex];
+      if (!mission || !Array.isArray(mission.questions)) {
+        portugueseCard.innerHTML = `<p class="topic">MISSÃO PORTUGUÊS</p><h2>Missão em revisão</h2><p class="feedback good">A missão está sendo ajustada. Tente voltar para a aba anterior e abrir novamente.</p><button class="next-button" id="back-to-portuguese-mission">Voltar</button>`;
+        document.querySelector('#back-to-portuguese-mission').addEventListener('click', renderPortugueseLesson);
+        return;
+      }
       if (mission.game === 'match') { renderPortugueseMatchGame(mission); return; }
       const question = mission.questions[portugueseQuestionIndex];
       const shuffledOptions = question.options.map((option, index) => ({ option, index })).sort(() => Math.random() - 0.5);
@@ -789,12 +840,22 @@
     function choosePortugueseAnswer(selected) {
       if (portugueseAnswered) return;
       portugueseAnswered = true;
-      const question = portugueseMissions[portugueseMissionIndex].questions[portugueseQuestionIndex];
+      const mission = portugueseMissions[portugueseMissionIndex];
+      const question = mission.questions[portugueseQuestionIndex];
       const options = portugueseCard.querySelectorAll('.answer');
       const feedback = document.querySelector('#portuguese-feedback');
-      options.forEach(option => { option.disabled = true; if (Number(option.dataset.portugueseAnswer) === question.answer) option.classList.add('correct'); });
+      options.forEach(option => {
+        option.disabled = true;
+        if (Number(option.dataset.portugueseAnswer) === question.answer) {
+          option.classList.add('correct');
+        }
+      });
       if (selected === question.answer) { portugueseStars++; portugueseStarDisplay.textContent = portugueseStars; feedback.textContent = 'Acertou! Você ganhou uma estrela.'; feedback.className = 'feedback good'; }
-      else { Array.from(options).find(option => Number(option.dataset.portugueseAnswer) === selected).classList.add('wrong'); feedback.textContent = `Quase! ${question.tip}`; feedback.className = 'feedback bad'; }
+      else {
+        const selectedOption = Array.from(options).find(option => Number(option.dataset.portugueseAnswer) === selected);
+        if (selectedOption) selectedOption.classList.add('wrong');
+        feedback.textContent = `Quase! ${question.tip}`; feedback.className = 'feedback bad';
+      }
       document.querySelector('#portuguese-next-button').classList.remove('hidden');
       document.querySelector('#portuguese-next-button').addEventListener('click', nextPortugueseQuestion);
     }
@@ -856,8 +917,33 @@
         { q: 'O que este sinal pede?', image: historyPicture('stop', 'PARE'), alt: 'Ilustração de placa de pare', options: ['Parar', 'Correr', 'Virar sem olhar', 'Brincar na rua'], answer: 0, tip: 'A placa PARE orienta motoristas e ajuda a evitar acidentes.' },
         { q: 'Antes de atravessar, onde é mais seguro passar?', image: historyPicture('crossing', 'FAIXA DE PEDESTRES'), alt: 'Ilustração de faixa de pedestres', options: ['Na faixa de pedestres', 'No meio da rua', 'Atrás de um ônibus', 'Entre carros'], answer: 0, tip: 'A faixa de pedestres é o local mais seguro para atravessar.' },
         { q: 'O que fazer com esta mensagem de desconhecido?', image: historyPicture('phone', 'MENSAGEM DESCONHECIDA'), alt: 'Ilustração de celular com mensagem', options: ['Avisar um adulto', 'Enviar a senha', 'Mandar o endereço', 'Clicar em todo link'], answer: 0, tip: 'Nunca envie dados pessoais. Peça ajuda a um adulto.' }
+      ]},
+      { name: 'Capítulo 5: Desafios do Livro', summary: 'Use o que você aprendeu para resolver situações do dia a dia: organizar a rotina, reconhecer trabalhos, cuidar da natureza, circular com segurança e usar a internet com responsabilidade.', questions: [
+        { q: 'Joana tem consulta marcada para dia 18. Onde ela deve procurar essa informação?', image: historyPicture('clock', 'DIA 18 NO CALENDÁRIO'), alt: 'Ilustração de relógio e calendário', options: ['No calendário', 'No semáforo', 'No rádio', 'Na faixa de pedestres'], answer: 0, tip: 'O calendário ajuda a marcar e lembrar datas importantes.' },
+        { q: 'Uma pessoa colheu tomates para vender. Em qual atividade ela trabalha?', image: historyPicture('farm', 'COLHER TOMATES'), alt: 'Ilustração de plantação', options: ['Agropecuária', 'Industrial', 'Extrativa', 'Comunicação'], answer: 0, tip: 'Plantar e colher alimentos faz parte da atividade agropecuária.' },
+        { q: 'Uma fábrica transforma algodão em camisetas. Essa atividade é...', image: historyPicture('farm', 'MATÉRIA-PRIMA E FÁBRICA'), alt: 'Ilustração relacionada a produção', options: ['Industrial', 'Agropecuária', 'Extrativa', 'Trânsito'], answer: 0, tip: 'A indústria transforma matérias-primas em produtos.' },
+        { q: 'Depois de lavar as mãos, qual atitude evita desperdício?', image: historyPicture('clock', 'CUIDAR DA ÁGUA'), alt: 'Ilustração de rotina', options: ['Fechar a torneira', 'Deixar a torneira aberta', 'Jogar lixo no ralo', 'Usar água sem precisar'], answer: 0, tip: 'Fechar a torneira quando não estamos usando economiza água.' },
+        { q: 'Qual opção é um transporte e não um meio de comunicação?', image: historyPicture('crossing', 'VIAJAR COM SEGURANÇA'), alt: 'Ilustração de faixa de pedestres', options: ['Bicicleta', 'Rádio', 'Telefone', 'Jornal'], answer: 0, tip: 'A bicicleta leva pessoas de um lugar a outro.' },
+        { q: 'O semáforo ficou amarelo. O que o motorista deve fazer?', image: historyPicture('stop', 'ATENÇÃO NO TRÂNSITO'), alt: 'Ilustração de sinal de trânsito', options: ['Reduzir a velocidade e ter atenção', 'Acelerar muito', 'Fechar os olhos', 'Andar pela calçada'], answer: 0, tip: 'A luz amarela pede atenção e cuidado.' },
+        { q: 'Um jogo on-line pede seu nome completo e endereço. O que você faz?', image: historyPicture('phone', 'PROTEJA SEUS DADOS'), alt: 'Ilustração de celular', options: ['Não informar e chamar um adulto', 'Enviar tudo rapidamente', 'Criar uma senha com a data de nascimento e contar', 'Aceitar qualquer pedido'], answer: 0, tip: 'Dados pessoais devem ser protegidos. Peça ajuda a um adulto de confiança.' }
+      ]},
+      { name: 'Capítulo 6: Do Campo à Cidade', summary: 'Os segundos, minutos, dias, semanas, meses e anos ajudam a contar o tempo. Muitos alimentos vêm do campo: são plantados, colhidos e transportados até a cidade. Agricultura, pecuária, extrativismo e indústria são atividades de trabalho importantes.', questions: [
+        { q: 'Qual unidade de tempo é menor?', options: ['Segundo', 'Minuto', 'Dia', 'Ano'], answer: 0, tip: 'O segundo é uma unidade muito pequena de tempo.' },
+        { q: 'Qual unidade de tempo usamos para contar os dias de uma semana?', options: ['Semana', 'Hora', 'Minuto', 'Segundo'], answer: 0, tip: 'Uma semana tem sete dias.' },
+        { q: 'O arroz, o feijão e a banana geralmente são plantados e colhidos onde?', options: ['No campo ou na fazenda', 'Na fábrica de brinquedos', 'No semáforo', 'No computador'], answer: 0, tip: 'Muitos vegetais que comemos vêm de fazendas e sítios.' },
+        { q: 'Depois de colhida, como a laranja pode chegar à cidade?', options: ['Em um caminhão', 'Por uma mensagem', 'Em um relógio', 'Em um livro'], answer: 0, tip: 'Transportes levam os produtos do campo até a cidade.' },
+        { q: 'Como chamamos o trabalho de plantar e colher alimentos?', options: ['Agricultura', 'Extrativismo', 'Comunicação', 'Trânsito'], answer: 0, tip: 'Agricultura é a produção de vegetais por meio do plantio.' },
+        { q: 'Criar vacas, galinhas ou porcos é uma atividade de...', options: ['Pecuária', 'Reciclagem', 'Navegação', 'Informática'], answer: 0, tip: 'Pecuária é a criação de animais para produção.' },
+        { q: 'Qual sequência mostra o caminho de um alimento?', options: ['Plantio, colheita, transporte, mercado', 'Mercado, semente, relógio, escola', 'Computador, colheita, trânsito, filme', 'Fábrica, nuvem, livro, brinquedo'], answer: 0, tip: 'Os alimentos podem ser plantados, colhidos, transportados e vendidos.' },
+        { q: 'Para cuidar do solo no campo, qual atitude é melhor?', options: ['Evitar jogar lixo e produtos poluentes', 'Queimar plástico perto da plantação', 'Derramar óleo na terra', 'Desperdiçar água todos os dias'], answer: 0, tip: 'O solo precisa estar limpo e saudável para ajudar no plantio.' }
       ]}
     ];
+    historyGeoMissions.push({ name: 'Capítulo 7: Situações do Dia', summary: 'Resolva situações de tempo, trabalho, transporte e comunicação como nas atividades de leitura do livro.', questions: [
+      { q: 'A feira da cidade acontece no sábado. Em qual instrumento você pode marcar essa data?', options: ['Calendário', 'Semáforo', 'Rádio', 'Bicicleta'], answer: 0, tip: 'O calendário ajuda a organizar datas e compromissos.' },
+      { q: 'Uma família cria galinhas para vender ovos. Esse trabalho é de...', options: ['Pecuária', 'Indústria', 'Extrativismo', 'Comunicação'], answer: 0, tip: 'Criar animais faz parte da pecuária.' },
+      { q: 'Você quer avisar sua avó que chegou bem em casa. Qual meio de comunicação pode usar?', options: ['Telefone', 'Ônibus', 'Faixa de pedestres', 'Calendário'], answer: 0, tip: 'O telefone permite que as pessoas conversem a distância.' }
+    ]});
+
     let historyGeoMissionIndex = 0, historyGeoQuestionIndex = 0, historyGeoStars = 0, historyGeoAnswered = false;
     const historyGeoTabs = document.querySelector('#history-geo-mission-tabs'), historyGeoCard = document.querySelector('#history-geo-question-card'), historyGeoStarDisplay = document.querySelector('#history-geo-stars'), historyGeoProgress = document.querySelector('#history-geo-progress-fill');
     function renderHistoryGeoTabs() { historyGeoTabs.innerHTML = historyGeoMissions.map((mission, index) => `<button class="mission-tab ${index === historyGeoMissionIndex ? 'active' : ''}" data-history-geo-mission="${index}">${mission.name}</button>`).join(''); historyGeoTabs.querySelectorAll('button').forEach(button => button.addEventListener('click', () => { historyGeoMissionIndex = Number(button.dataset.historyGeoMission); historyGeoQuestionIndex = 0; renderHistoryGeoTabs(); renderHistoryGeoLesson(); })); }
@@ -868,7 +954,15 @@
 
     // Mathematics module: four chapters with six questions each.
     function mathPicture(label) {
-      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="520" height="90" viewBox="0 0 520 90"><rect width="520" height="90" rx="14" fill="#e8f4ff"/><text x="260" y="55" text-anchor="middle" font-family="Arial" font-size="22" fill="#234">${label}</text></svg>`)}`;
+      let drawing = '';
+      if (label.includes('milhares')) drawing = '<rect x="72" y="48" width="74" height="74" fill="#ec6b6b"/><rect x="164" y="72" width="48" height="48" fill="#ffd365"/><rect x="230" y="88" width="88" height="18" fill="#75c7e2"/><g fill="#6bc275"><rect x="337" y="86" width="17" height="17"/><rect x="359" y="86" width="17" height="17"/><rect x="381" y="86" width="17" height="17"/><rect x="403" y="86" width="17" height="17"/><rect x="425" y="86" width="17" height="17"/><rect x="447" y="86" width="17" height="17"/></g><text x="109" y="145" text-anchor="middle" font-size="17">M</text><text x="188" y="145" text-anchor="middle" font-size="17">C</text><text x="274" y="145" text-anchor="middle" font-size="17">D</text><text x="400" y="145" text-anchor="middle" font-size="17">U</text>';
+      else if (label.includes('7 lápis')) drawing = '<g fill="#fff" stroke="#234" stroke-width="3"><rect x="38" y="62" width="105" height="114"/><rect x="151" y="62" width="105" height="114"/><rect x="264" y="62" width="105" height="114"/><rect x="377" y="62" width="105" height="114"/></g><g stroke="#e95844" stroke-width="6"><path d="M55 82v66M68 82v66M81 82v66M94 82v66M107 82v66M120 82v66M133 82v66M168 82v66M181 82v66M194 82v66M207 82v66M220 82v66M233 82v66M246 82v66M281 82v66M294 82v66M307 82v66M320 82v66M333 82v66M346 82v66M359 82v66M394 82v66M407 82v66M420 82v66M433 82v66M446 82v66M459 82v66M472 82v66"/></g><g font-family="sans-serif" font-size="16" font-weight="700" fill="#234" text-anchor="middle"><text x="90" y="166">7 lápis</text><text x="203" y="166">7 lápis</text><text x="316" y="166">7 lápis</text><text x="429" y="166">7 lápis</text></g>';
+      else if (label.includes('grupos')) drawing = '<g fill="#ffd365" stroke="#234" stroke-width="3"><rect x="68" y="73" width="70" height="55"/><rect x="166" y="73" width="70" height="55"/><rect x="264" y="73" width="70" height="55"/><rect x="362" y="73" width="70" height="55"/></g><g fill="#ec6b6b"><circle cx="89" cy="95" r="7"/><circle cx="108" cy="95" r="7"/><circle cx="127" cy="95" r="7"/><circle cx="187" cy="95" r="7"/><circle cx="206" cy="95" r="7"/><circle cx="225" cy="95" r="7"/><circle cx="285" cy="95" r="7"/><circle cx="304" cy="95" r="7"/><circle cx="323" cy="95" r="7"/><circle cx="383" cy="95" r="7"/><circle cx="402" cy="95" r="7"/><circle cx="421" cy="95" r="7"/></g>';
+      else if (label.includes('Tabela') || label.includes('A1')) drawing = '<g stroke="#234" stroke-width="3" fill="#fff"><rect x="120" y="42" width="280" height="120"/><path d="M190 42v120M295 42v120M120 82h280M120 122h280"/></g><g font-size="17" text-anchor="middle"><text x="242" y="70">1</text><text x="347" y="70">2</text><text x="155" y="110">A</text><text x="242" y="110">Livro</text><text x="347" y="110">Lápis</text><text x="155" y="150">B</text><text x="242" y="150">Cubo</text><text x="347" y="150">Bola</text></g>';
+      else if (label.includes('Grade')) drawing = '<g stroke="#234" stroke-width="3" fill="#fff"><rect x="180" y="35" width="180" height="180"/><path d="M240 35v180M300 35v180M180 95h180M180 155h180"/></g><g font-size="18" text-anchor="middle"><text x="210" y="25">1</text><text x="270" y="25">2</text><text x="330" y="25">3</text><text x="165" y="70">1</text><text x="165" y="130">2</text><text x="165" y="190">3</text></g><text x="270" y="195" text-anchor="middle" font-size="35">★</text>';
+      else if (label.includes('ponteiro')) drawing = '<circle cx="270" cy="120" r="72" fill="#fff" stroke="#234" stroke-width="5"/><g font-size="16" text-anchor="middle"><text x="270" y="65">12</text><text x="327" y="126">3</text><text x="270" y="185">6</text><text x="212" y="126">9</text></g><path d="M270 120v-48M270 120l42 0" stroke="#ec6b6b" stroke-width="6" stroke-linecap="round"/>';
+      else drawing = `<rect x="135" y="48" width="250" height="105" rx="8" fill="#fff" stroke="#234" stroke-width="4"/><text x="260" y="114" text-anchor="middle" font-family="sans-serif" font-size="31" fill="#234">${label}</text>`;
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 230"><rect width="520" height="230" fill="#fff8dc"/><text x="260" y="25" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#234">OBSERVE E RESOLVA</text>${drawing}</svg>`)}`;
     }
 
     const mathMissions = [
@@ -887,6 +981,8 @@
         { text: 'Uma biblioteca tinha 92 livros e emprestou 37. Quantos restaram?', choices: ['55', '65', '59', '45'], answer: 0 },
         { text: 'Qual conta completa 425 + ___ = 600?', choices: ['165', '175', '185', '225'], answer: 1 },
         { text: 'Pedro tinha R$ 50 e gastou R$ 27. Quanto sobrou?', choices: ['R$ 13', 'R$ 23', 'R$ 27', 'R$ 33'], answer: 1 }
+        , { text: 'Resolva por decomposição: 243 + 125 =', choices: ['358', '368', '378', '348'], answer: 1, picture: mathPicture('200 + 100, 40 + 20, 3 + 5') }
+        , { text: 'Uma festa tinha 245 balões. Estouraram 128. Quantos sobraram?', choices: ['117', '127', '137', '373'], answer: 0, picture: mathPicture('245 − 128 = ?') }
       ]},
       { name: 'Multiplicação e Tabelas', summary: 'Use grupos iguais, fatos básicos e tabelas de multiplicação para encontrar produtos.', questions: [
         { text: 'Quanto é 3 × 4?', choices: ['7', '12', '14', '16'], answer: 1 },
@@ -895,6 +991,9 @@
         { text: 'Qual é o resultado de 8 × 8?', choices: ['48', '56', '64', '72'], answer: 2 },
         { text: 'Na tabuada do 9, qual número vem em 9 × 3?', choices: ['18', '21', '27', '36'], answer: 2 },
         { text: 'Uma fila tem 5 crianças. Quantas crianças há em 6 filas iguais?', choices: ['11', '25', '30', '35'], answer: 2 }
+        , { text: 'Qual adição representa 4 × 3?', choices: ['3 + 3 + 3 + 3', '4 + 4 + 4', '3 + 4', '4 + 3 + 4'], answer: 0, picture: mathPicture('4 grupos iguais de 3') }
+        , { text: 'Na tabela, qual objeto está na linha B e coluna 2?', choices: ['Bola', 'Livro', 'Lápis', 'Cubo'], answer: 0, picture: mathPicture('A1 Livro | A2 Lápis | B1 Cubo | B2 Bola') }
+        , { text: 'Em qual posição está a estrela?', choices: ['(2, 3)', '(1, 1)', '(3, 2)', '(3, 3)'], answer: 0, picture: mathPicture('Grade: estrela na coluna 2 e linha 3') }
       ]},
       { name: 'Tempo e Rotina', summary: 'Leia horas, compare durações e organize acontecimentos da rotina.', questions: [
         { text: 'Quantos minutos há em 1 hora?', choices: ['30', '45', '60', '100'], answer: 2 },
@@ -903,13 +1002,27 @@
         { text: 'Qual atividade acontece primeiro em uma rotina escolar?', choices: ['Ir para casa', 'Aula da manhã', 'Jantar', 'Dormir'], answer: 1 },
         { text: 'Quantas horas se passam das 14h às 17h?', choices: ['2 horas', '3 horas', '4 horas', '7 horas'], answer: 1 },
         { text: 'Uma aula começa às 8h30 e termina às 9h15. Quanto dura?', choices: ['30 minutos', '45 minutos', '50 minutos', '1 hora'], answer: 1 }
+      ]},
+      { name: 'Desafio Visual', summary: 'Observe os desenhos, conte, compare e use as informações da tabela, da grade e do relógio para resolver cada desafio.', questions: [
+        { text: 'Observe os blocos. Qual número está representado?', choices: ['234', '324', '342', '432'], answer: 0, picture: mathPicture('2 centenas, 3 dezenas e 4 unidades') },
+        { text: 'Observe a conta armada. Qual é o resultado de 126 + 243?', choices: ['359', '369', '379', '469'], answer: 1, picture: mathPicture('  126\n+ 243\n─────') },
+        { text: 'Observe os grupos. Quantas bolinhas há em 5 grupos de 4?', choices: ['9', '16', '20', '25'], answer: 2, picture: mathPicture('5 grupos de 4 bolinhas') },
+        { text: 'Na tabela, o que está na linha A e coluna 2?', choices: ['Lápis', 'Livro', 'Bola', 'Cubo'], answer: 0, picture: mathPicture('Tabela: A1 Livro | A2 Lápis | B1 Cubo | B2 Bola') },
+        { text: 'Observe a grade. Qual é a posição da estrela?', choices: ['(2, 3)', '(1, 2)', '(3, 1)', '(3, 3)'], answer: 0, picture: mathPicture('Grade: estrela na coluna 2 e linha 3') },
+        { text: 'Observe o relógio. Que horas ele marca?', choices: ['3h', '6h', '9h', '12h'], answer: 0, picture: mathPicture('ponteiro curto no 3 e ponteiro longo no 12') }
       ]}
     ];
+    mathMissions.push({ name: 'Atividades do Material', summary: 'Resolva os desafios usando valor posicional, grupos iguais e medidas de tempo.', questions: [
+      { text: 'Qual número é formado por 3 milhares, 4 centenas, 2 dezenas e 5 unidades?', choices: ['3.425', '3.245', '3.452', '4.325'], answer: 0, picture: mathPicture('3 milhares, 4 centenas, 2 dezenas e 5 unidades') },
+      { text: 'Qual adição representa 5 grupos de 2?', choices: ['2 + 2 + 2 + 2 + 2', '5 + 5', '2 + 5', '5 + 2 + 5'], answer: 0, picture: mathPicture('5 grupos iguais de 2') },
+      { text: 'De terça-feira até sexta-feira, quantos dias se passam?', choices: ['3 dias', '2 dias', '4 dias', '5 dias'], answer: 0, picture: mathPicture('Terça → Quarta → Quinta → Sexta') }
+    ]});
+
     let mathMissionIndex = 0, mathQuestionIndex = 0, mathStars = 0;
     const mathGame = document.querySelector('#math-game'), mathTabs = document.querySelector('#math-mission-tabs'), mathCard = document.querySelector('#math-question-card'), mathProgress = document.querySelector('#math-progress-fill'), mathStarDisplay = document.querySelector('#math-stars');
     function renderMathTabs() { mathTabs.innerHTML = mathMissions.map((mission, index) => `<button class="mission-tab ${index === mathMissionIndex ? 'active' : ''}" data-math-mission="${index}">${mission.name}</button>`).join(''); mathTabs.querySelectorAll('button').forEach(button => button.addEventListener('click', () => { mathMissionIndex = Number(button.dataset.mathMission); mathQuestionIndex = 0; renderMathTabs(); renderMathLesson(); })); }
     function renderMathLesson() { const mission = mathMissions[mathMissionIndex]; mathProgress.style.width = '0%'; mathCard.innerHTML = `<p class="topic">LEIA E APRENDA</p><h2>${mission.name}</h2><p class="feedback good">Resumo: ${mission.summary}</p><p>${mission.summary}</p><button class="next-button" id="start-math">Começar missão</button>`; document.querySelector('#start-math').addEventListener('click', renderMathQuestion); }
-    function renderMathQuestion() { const mission = mathMissions[mathMissionIndex], question = mission.questions[mathQuestionIndex], choices = question.choices.map((text, originalIndex) => ({ text, originalIndex })).sort(() => Math.random() - 0.5); mathProgress.style.width = `${(mathQuestionIndex / mission.questions.length) * 100}%`; mathCard.innerHTML = `<p class="topic">QUESTÃO ${mathQuestionIndex + 1} DE ${mission.questions.length}</p><h2>${question.text}</h2>${question.picture ? `<img class="question-picture" alt="Ilustração da questão" src="${question.picture}">` : ''}<div class="answers">${choices.map(choice => `<button class="answer-button" data-math-answer="${choice.originalIndex}">${choice.text}</button>`).join('')}</div><p class="feedback" id="math-feedback"></p>`; mathCard.querySelectorAll('.answer-button').forEach(button => button.addEventListener('click', () => { const feedback = document.querySelector('#math-feedback'), correct = Number(button.dataset.mathAnswer) === question.answer; mathCard.querySelectorAll('.answer-button').forEach(item => item.disabled = true); if (correct) { mathStars++; mathStarDisplay.textContent = mathStars; feedback.textContent = 'Muito bem! Você ganhou uma estrela.'; feedback.className = 'feedback good'; } else { feedback.textContent = `Quase! A resposta correta é ${question.choices[question.answer]}.`; feedback.className = 'feedback bad'; } const next = document.createElement('button'); next.className = 'next-button'; next.textContent = mathQuestionIndex < mission.questions.length - 1 ? 'Próxima questão' : 'Continuar'; next.addEventListener('click', nextMathQuestion); mathCard.appendChild(next); })); }
+    function renderMathQuestion() { const mission = mathMissions[mathMissionIndex], question = mission.questions[mathQuestionIndex], choices = question.choices.map((text, originalIndex) => ({ text, originalIndex })).sort(() => Math.random() - 0.5); mathProgress.style.width = `${(mathQuestionIndex / mission.questions.length) * 100}%`; mathCard.innerHTML = `<p class="topic">QUESTÃO ${mathQuestionIndex + 1} DE ${mission.questions.length}</p><h2>${question.text}</h2>${question.picture ? `<img class="question-image" alt="Ilustração da questão" src="${question.picture}">` : ''}<div class="answers">${choices.map((choice, index) => `<button class="answer" data-math-answer="${choice.originalIndex}"><span class="answer-key">${String.fromCharCode(65 + index)}</span>${choice.text}</button>`).join('')}</div><p class="feedback" id="math-feedback"></p>`; mathCard.querySelectorAll('.answer').forEach(button => button.addEventListener('click', () => { const feedback = document.querySelector('#math-feedback'), correct = Number(button.dataset.mathAnswer) === question.answer; mathCard.querySelectorAll('.answer').forEach(item => item.disabled = true); if (correct) { mathStars++; mathStarDisplay.textContent = mathStars; feedback.textContent = 'Muito bem! Você ganhou uma estrela.'; feedback.className = 'feedback good'; } else { button.classList.add('wrong'); feedback.textContent = `Quase! A resposta correta é ${question.choices[question.answer]}.`; feedback.className = 'feedback bad'; } const next = document.createElement('button'); next.className = 'next-button'; next.textContent = mathQuestionIndex < mission.questions.length - 1 ? 'Próxima questão' : 'Continuar'; next.addEventListener('click', nextMathQuestion); mathCard.appendChild(next); })); }
     function nextMathQuestion() { const mission = mathMissions[mathMissionIndex]; if (mathQuestionIndex < mission.questions.length - 1) { mathQuestionIndex++; renderMathQuestion(); return; } if (mathMissionIndex < mathMissions.length - 1) { mathMissionIndex++; mathQuestionIndex = 0; renderMathTabs(); renderMathLesson(); return; } mathProgress.style.width = '100%'; mathCard.innerHTML = `<div class="result"><div class="trophy">★</div><p class="topic">MISSÃO CONCLUÍDA</p><h2>Você concluiu Matemática!</h2><p>Você conquistou ${mathStars} estrelas.</p><button class="restart-button" id="math-restart">Jogar novamente</button></div>`; document.querySelector('#math-restart').addEventListener('click', () => { mathMissionIndex = 0; mathQuestionIndex = 0; mathStars = 0; mathStarDisplay.textContent = mathStars; renderMathTabs(); renderMathLesson(); }); }
     function initMath() { renderMathTabs(); renderMathLesson(); }
 

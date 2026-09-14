@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Português</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="game-shell">
+      <header class="topbar subject-topbar">
+        <a href="../../index.html" class="back-link">← Voltar</a>
+        <div>
+          <p class="eyebrow">Matéria</p>
+          <h1>Português</h1>
+        </div>
+      </header>
+
+      <main class="quiz-panel">
+        <section class="status-bar">
+          <div class="pill">Pontuação: <strong id="score">0</strong></div>
+          <div class="pill">Pergunta: <strong id="question-number">1</strong>/5</div>
+        </section>
+
+        <section class="question-card">
+          <div class="icon-box" id="emoji-box">📚</div>
+          <h2 id="question-text">Carregando pergunta...</h2>
+          <div id="answers" class="answers"></div>
+          <div id="feedback" class="feedback hidden"></div>
+          <button id="next-button" class="button primary hidden">Próxima</button>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
