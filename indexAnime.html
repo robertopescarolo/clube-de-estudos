@@ -523,6 +523,16 @@ h2 { margin: 10px 0 18px; font-size: clamp(29px, 5vw, 45px); line-height: 1.02; 
         { q: 'The magnet can pick up paper clips because they are...', image: englishScene('mixture', 'SUPER REVIEW', 'MAGNET TEST'), alt: 'Original pixel drawing of a magnet and paper clips', options: ['metal', 'paper', 'wood', 'glass'], answer: 0, tip: 'Paper clips are made of metal. Magnets attract metal.' },
         { q: 'A glass window feels even when you touch it. It is...', image: englishScene('window', 'SUPER REVIEW', 'EVEN SURFACE'), alt: 'Original pixel drawing of a glass window', options: ['smooth', 'rough', 'soft', 'absorbent'], answer: 0, tip: 'Smooth means even, without bumps.' },
         { q: 'To make a mixture, you can put beads, buttons and paper clips...', image: englishScene('mixture', 'SUPER REVIEW', 'MAKE A MIXTURE'), alt: 'Original pixel drawing of different objects in a mixture', options: ['together', 'in different rooms', 'only in water', 'one at a time'], answer: 0, tip: 'A mixture is made when different materials are together.' }
+      ]},
+      { name: 'Mission 6: Mixture Masters', questions: [
+        { q: 'Salt water looks the same all through the glass. It is a...', image: englishScene('mixture', 'MIXTURE MASTERS', 'SALT + WATER'), alt: 'Original pixel drawing of salt water', options: ['homogeneous mixture', 'heterogeneous mixture', 'pure substance', 'magnet'], answer: 0, tip: 'In a homogeneous mixture, it is difficult to see the different substances.' },
+        { q: 'A salad has lettuce, tomato and carrot that we can see. It is a...', image: englishScene('mixture', 'MIXTURE MASTERS', 'SALAD'), alt: 'Original pixel drawing of a salad mixture', options: ['heterogeneous mixture', 'homogeneous mixture', 'pure substance', 'metal'], answer: 0, tip: 'In a heterogeneous mixture, we can see the different substances.' },
+        { q: 'Gold is one material, not a mix. It is a...', image: englishScene('brick', 'MIXTURE MASTERS', 'ONE MATERIAL'), alt: 'Original pixel drawing representing one material', options: ['pure substance', 'mixture', 'filter', 'magnetism'], answer: 0, tip: 'A pure substance has only one kind of material.' },
+        { q: 'Which method uses a filter to keep the solid and let the liquid pass?', image: englishScene('sponge', 'MIXTURE MASTERS', 'FILTER + LIQUID'), alt: 'Original pixel drawing of a filter material', options: ['filtration', 'distillation', 'evaporation', 'magnetism'], answer: 0, tip: 'Filtration separates a solid from a liquid using a filter.' },
+        { q: 'Which method can get salt from salt water by heating the water?', image: englishScene('mixture', 'MIXTURE MASTERS', 'HEAT THE WATER'), alt: 'Original pixel drawing of a heated mixture', options: ['evaporation', 'filtration', 'magnetism', 'mixing'], answer: 0, tip: 'In evaporation, the water changes into vapour and the salt stays behind.' },
+        { q: 'Which method heats a liquid and collects it again after it cools?', image: englishScene('mixture', 'MIXTURE MASTERS', 'HEAT AND COOL'), alt: 'Original pixel drawing of a liquid mixture', options: ['distillation', 'filtration', 'magnetism', 'roughness'], answer: 0, tip: 'Distillation heats a liquid, then cools the vapour to collect the liquid again.' },
+        { q: 'A magnet separates iron nails from sand. This method is...', image: englishScene('mixture', 'MIXTURE MASTERS', 'MAGNET + NAILS'), alt: 'Original pixel drawing of a magnet and nails', options: ['magnetism', 'evaporation', 'filtration', 'distillation'], answer: 0, tip: 'Magnetism is used when one material in the mixture is metal.' },
+        { q: 'Which mixture is homogeneous?', image: englishScene('mixture', 'MIXTURE MASTERS', 'LOOK CAREFULLY'), alt: 'Original pixel drawing of a mixture', options: ['orange juice without pieces', 'fruit salad', 'sand and nails', 'rice and beans'], answer: 0, tip: 'A homogeneous mixture looks the same because we cannot easily see its different parts.' }
       ]}
     ];
 
@@ -536,10 +546,18 @@ h2 { margin: 10px 0 18px; font-size: clamp(29px, 5vw, 45px); line-height: 1.02; 
     const englishProgress = document.querySelector('#english-progress-fill');
 
     function renderEnglishTabs() {
-      englishTabs.innerHTML = englishMissions.map((mission, index) => `<button class="mission-tab ${index === englishMissionIndex ? 'active' : ''}" data-english-mission="${index}">${mission.name}</button>`).join('');
+      englishTabs.innerHTML = `<button class="mission-tab" id="english-study-guide">Study Guide</button>${englishMissions.map((mission, index) => `<button class="mission-tab ${index === englishMissionIndex ? 'active' : ''}" data-english-mission="${index}">${mission.name}</button>`).join('')}`;
+      document.querySelector('#english-study-guide').addEventListener('click', renderEnglishStudyGuide);
       englishTabs.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+        if (!button.dataset.englishMission) return;
         englishMissionIndex = Number(button.dataset.englishMission); englishQuestionIndex = 0; renderEnglishTabs(); renderEnglishQuestion();
       }));
+    }
+
+    function renderEnglishStudyGuide() {
+      englishProgress.style.width = '0%';
+      englishCard.innerHTML = `<p class="topic">ENGLISH REFERENCE</p><h2>Study Guide: Materials and Mixtures</h2><p class="feedback good">Materials: brick, plastic, wood, paper, glass and metal.</p><p><strong>Properties:</strong> rough / smooth, absorbent / waterproof, soft / hard, flexible / rigid.</p><p><strong>Origins:</strong> Natural materials come from nature. Manufactured materials are made by people.</p><p><strong>Mixtures:</strong> Pure means one substance. Homogeneous looks the same. Heterogeneous has parts we can see.</p><p><strong>Separate mixtures:</strong> filtration, evaporation, distillation and magnetism. A magnet attracts metal.</p><button class="next-button" id="back-to-english">Back to missions</button>`;
+      document.querySelector('#back-to-english').addEventListener('click', renderEnglishQuestion);
     }
 
     function renderEnglishQuestion() {
