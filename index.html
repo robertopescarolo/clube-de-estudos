@@ -178,6 +178,7 @@
     <button class="subject-choice" id="open-english" type="button">Inglês</button>
     <button class="subject-choice" id="open-portuguese" type="button">Português</button>
     <button class="subject-choice" id="open-history-geo" type="button">História e Geografia</button>
+    <button class="subject-choice" id="open-math" type="button">Matemática</button>
     <p id="subject-feedback" aria-live="polite"></p>
   </section>
   <div class="game-shell hidden-screen" id="science-game">
@@ -232,6 +233,14 @@
       <section class="question-card" id="history-geo-question-card" aria-live="polite"></section>
     </main>
   </div>
+
+  <section class="game-screen hidden-screen" id="math-game">
+    <button class="back-button" id="back-home-math" type="button">← Voltar aos assuntos</button>
+    <div class="game-header"><h1>Matemática</h1><div class="stars">★ <span id="math-stars">0</span></div></div>
+    <div class="mission-tabs" id="math-mission-tabs"></div>
+    <div class="progress-bar"><div class="progress-fill" id="math-progress-fill"></div></div>
+    <article class="question-card" id="math-question-card"></article>
+  </section>
 
   <script>
     const missions = [
@@ -658,6 +667,21 @@
       document.querySelector('#english-restart').addEventListener('click', () => { englishMissionIndex = 0; englishQuestionIndex = 0; englishStars = 0; englishStarDisplay.textContent = englishStars; renderEnglishTabs(); renderEnglishQuestion(); });
     }
 
+    function lessonPicture(icon, label) {
+      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300"><rect width="640" height="300" fill="#d8f2f1"/><rect y="236" width="640" height="64" fill="#ffd36a"/><text x="320" y="150" text-anchor="middle" font-size="120">${icon}</text><text x="320" y="275" text-anchor="middle" font-family="sans-serif" font-size="27" font-weight="900" fill="#18304b">${label}</text></svg>`)}`;
+    }
+
+    function historyPicture(scene, label) {
+      const drawings = {
+        clock: '<circle cx="320" cy="145" r="88" fill="#fffaf0" stroke="#18304b" stroke-width="12"/><path d="M320 77v15M388 145h-15M320 213v-15M252 145h15M320 145v-50M320 145l42 30" stroke="#fa5c89" stroke-width="12" stroke-linecap="round"/>',
+        farm: '<path d="M75 240h490" stroke="#71b85a" stroke-width="16"/><path d="M165 240v-92M137 188h56M475 240v-92M447 188h56" stroke="#4f9845" stroke-width="12"/><path d="M190 240l50-88 50 88M400 240l50-88 50 88" fill="#69b95c" stroke="#18304b" stroke-width="9"/><circle cx="290" cy="83" r="35" fill="#ffc938"/>',
+        stop: '<path d="M250 55h140l55 55v140l-55 55H250l-55-55V110z" fill="#e95151" stroke="#18304b" stroke-width="12"/><text x="320" y="196" text-anchor="middle" font-family="sans-serif" font-size="44" font-weight="900" fill="#fff">PARE</text>',
+        crossing: '<path d="M0 210h640v90H0z" fill="#5b6f7e"/><path d="M72 226h74v48H72zM205 226h74v48h-74zM338 226h74v48h-74zM471 226h74v48h-74z" fill="#fff"/><path d="M286 93h68v111h-68z" fill="#ffc938" stroke="#18304b" stroke-width="10"/><circle cx="320" cy="122" r="18" fill="#18304b"/><path d="M320 143v34M320 154l-24 26M320 154l24 26" stroke="#18304b" stroke-width="10"/>',
+        phone: '<rect x="235" y="42" width="170" height="224" rx="22" fill="#283c73" stroke="#18304b" stroke-width="11"/><rect x="253" y="72" width="134" height="142" fill="#b7eaf0"/><path d="M278 111h85M278 140h65M278 169h82" stroke="#e95151" stroke-width="10"/><circle cx="320" cy="240" r="10" fill="#fff"/><path d="M424 77l75 75M499 77l-75 75" stroke="#e95151" stroke-width="15"/>'
+      };
+      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300"><rect width="640" height="300" fill="#c9eef2"/><rect y="250" width="640" height="50" fill="#ffd36a"/>${drawings[scene]}<text x="320" y="283" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="900" fill="#18304b">${label}</text></svg>`)}`;
+    }
+
     const portugueseMissions = [
       { name: 'Missão 1: Relatos e Tempo', questions: [
         { q: 'Um relato pessoal é um texto em que a pessoa...', options: ['conta algo que viveu', 'ensina uma receita', 'vende um produto', 'inventa uma regra'], answer: 0, tip: 'No relato pessoal, quem escreve conta uma experiência que viveu.' },
@@ -713,6 +737,13 @@
       { name: 'Missão 7: Desafio do C', game: 'match', title: 'Que som a letra C faz?', help: 'Toque em uma palavra e escolha o som da letra C.', choices: { k: 'Som de /k/', s: 'Som de /s/' }, items: [
         { name: 'Casa', icon: '🏠', group: 'k' }, { name: 'Copo', icon: '🥤', group: 'k' }, { name: 'Cubo', icon: '🧊', group: 'k' },
         { name: 'Cedo', icon: '⏰', group: 's' }, { name: 'Cidade', icon: '🏙️', group: 's' }, { name: 'Cinema', icon: '🎬', group: 's' }
+      ]},
+      { name: 'Missão 8: Leitura Visual', questions: [
+        { q: 'Leia o cartaz. Qual é o pedido principal?', image: lessonPicture('🎁', 'DOE BRINQUEDOS'), alt: 'Cartaz de doação de brinquedos', options: ['Doar brinquedos', 'Comprar brinquedos', 'Esconder brinquedos', 'Quebrar brinquedos'], answer: 0, tip: 'A palavra “doe” faz um pedido para ajudar.' },
+        { q: 'Qual frase está bem escrita?', image: lessonPicture('✏️', 'FRASE COMPLETA'), alt: 'Lápis e frase completa', options: ['Ana brinca no parque.', 'ana brinca no parque', 'Ana brinca no parque', 'ana brinca no parque.'], answer: 0, tip: 'A frase começa com maiúscula e termina com ponto final.' },
+        { q: 'Qual palavra é o contrário de abrir?', image: lessonPicture('📖', 'ABRIR E FECHAR'), alt: 'Livro aberto', options: ['Fechar', 'Ler', 'Olhar', 'Escrever'], answer: 0, tip: 'Abrir e fechar são antônimos.' },
+        { q: 'Qual palavra ajuda a contar uma experiência em ordem?', image: lessonPicture('⏳', 'PRIMEIRO, DEPOIS, POR FIM'), alt: 'Ampulheta', options: ['Depois', 'Bonito', 'Cachorro', 'Recife'], answer: 0, tip: 'Depois é um marcador de tempo.' },
+        { q: 'Qual atitude mostra boa convivência?', image: lessonPicture('🤝', 'RESPEITO'), alt: 'Aperto de mãos', options: ['Ouvir o colega', 'Empurrar o colega', 'Zombar do colega', 'Pegar algo sem pedir'], answer: 0, tip: 'Ouvir o colega é uma atitude respeitosa.' }
       ]}
     ];
 
@@ -751,7 +782,7 @@
       const question = mission.questions[portugueseQuestionIndex];
       const shuffledOptions = question.options.map((option, index) => ({ option, index })).sort(() => Math.random() - 0.5);
       portugueseProgress.style.width = `${(portugueseQuestionIndex / mission.questions.length) * 100}%`;
-      portugueseCard.innerHTML = `<p class="topic">${mission.name.toUpperCase()}</p><span class="question-number">${portugueseQuestionIndex + 1} / ${mission.questions.length}</span><h2>${question.q}</h2><div class="answers">${shuffledOptions.map(({ option, index }, displayIndex) => `<button class="answer" data-portuguese-answer="${index}"><span class="answer-key">${String.fromCharCode(65 + displayIndex)}</span>${option}</button>`).join('')}</div><p class="feedback" id="portuguese-feedback"></p><button class="next-button hidden" id="portuguese-next-button">Próxima pergunta</button>`;
+      portugueseCard.innerHTML = `<p class="topic">${mission.name.toUpperCase()}</p><span class="question-number">${portugueseQuestionIndex + 1} / ${mission.questions.length}</span>${question.image ? `<img class="question-image" src="${question.image}" alt="${question.alt}">` : ''}<h2>${question.q}</h2><div class="answers">${shuffledOptions.map(({ option, index }, displayIndex) => `<button class="answer" data-portuguese-answer="${index}"><span class="answer-key">${String.fromCharCode(65 + displayIndex)}</span>${option}</button>`).join('')}</div><p class="feedback" id="portuguese-feedback"></p><button class="next-button hidden" id="portuguese-next-button">Próxima pergunta</button>`;
       portugueseCard.querySelectorAll('.answer').forEach(button => button.addEventListener('click', () => choosePortugueseAnswer(Number(button.dataset.portugueseAnswer))));
     }
 
@@ -818,15 +849,69 @@
         { q: 'Onde o pedestre deve atravessar quando há faixa?', options: ['Na faixa de pedestres', 'No meio da rua', 'Entre carros parados', 'Em qualquer lugar correndo'], answer: 0, tip: 'A faixa é um local mais seguro para atravessar.' },
         { q: 'Na internet, o que devemos fazer se um desconhecido pedir nosso endereço?', options: ['Não responder e avisar um adulto', 'Enviar o endereço', 'Mandar uma foto da casa', 'Continuar a conversa sozinho'], answer: 0, tip: 'Dados pessoais devem ser protegidos. Peça ajuda a um adulto.' },
         { q: 'Qual cuidado é importante ao usar a internet?', options: ['Não clicar em links estranhos', 'Contar senhas para qualquer pessoa', 'Falar com desconhecidos sem avisar', 'Aceitar todos os pedidos'], answer: 0, tip: 'Links estranhos podem levar a sites perigosos.' }
+      ]},
+      { name: 'Capítulo 4: Vida em Movimento', summary: 'O relógio e o calendário organizam o tempo. O trabalho ajuda as pessoas e a sociedade. No trânsito, sinais e faixas protegem todos. Na internet, cuidado com dados pessoais e mensagens de desconhecidos.', questions: [
+        { q: 'Para que serve este relógio?', image: historyPicture('clock', 'HORA DE ESTUDAR'), alt: 'Ilustração de relógio', options: ['Organizar o horário', 'Atravessar a rua', 'Mandar mensagem', 'Plantar alimento'], answer: 0, tip: 'O relógio ajuda a saber a hora de cada atividade.' },
+        { q: 'Qual trabalhador aparece ligado à plantação?', image: historyPicture('farm', 'PLANTAR E COLHER'), alt: 'Ilustração de plantação', options: ['Agricultor', 'Piloto', 'Locutor', 'Professor'], answer: 0, tip: 'O agricultor planta e colhe alimentos.' },
+        { q: 'O que este sinal pede?', image: historyPicture('stop', 'PARE'), alt: 'Ilustração de placa de pare', options: ['Parar', 'Correr', 'Virar sem olhar', 'Brincar na rua'], answer: 0, tip: 'A placa PARE orienta motoristas e ajuda a evitar acidentes.' },
+        { q: 'Antes de atravessar, onde é mais seguro passar?', image: historyPicture('crossing', 'FAIXA DE PEDESTRES'), alt: 'Ilustração de faixa de pedestres', options: ['Na faixa de pedestres', 'No meio da rua', 'Atrás de um ônibus', 'Entre carros'], answer: 0, tip: 'A faixa de pedestres é o local mais seguro para atravessar.' },
+        { q: 'O que fazer com esta mensagem de desconhecido?', image: historyPicture('phone', 'MENSAGEM DESCONHECIDA'), alt: 'Ilustração de celular com mensagem', options: ['Avisar um adulto', 'Enviar a senha', 'Mandar o endereço', 'Clicar em todo link'], answer: 0, tip: 'Nunca envie dados pessoais. Peça ajuda a um adulto.' }
       ]}
     ];
     let historyGeoMissionIndex = 0, historyGeoQuestionIndex = 0, historyGeoStars = 0, historyGeoAnswered = false;
     const historyGeoTabs = document.querySelector('#history-geo-mission-tabs'), historyGeoCard = document.querySelector('#history-geo-question-card'), historyGeoStarDisplay = document.querySelector('#history-geo-stars'), historyGeoProgress = document.querySelector('#history-geo-progress-fill');
     function renderHistoryGeoTabs() { historyGeoTabs.innerHTML = historyGeoMissions.map((mission, index) => `<button class="mission-tab ${index === historyGeoMissionIndex ? 'active' : ''}" data-history-geo-mission="${index}">${mission.name}</button>`).join(''); historyGeoTabs.querySelectorAll('button').forEach(button => button.addEventListener('click', () => { historyGeoMissionIndex = Number(button.dataset.historyGeoMission); historyGeoQuestionIndex = 0; renderHistoryGeoTabs(); renderHistoryGeoLesson(); })); }
     function renderHistoryGeoLesson() { const mission = historyGeoMissions[historyGeoMissionIndex]; historyGeoProgress.style.width = '0%'; historyGeoCard.innerHTML = `<p class="topic">LEIA E APRENDA</p><h2>${mission.name}</h2><p class="feedback good">Leia antes de jogar.</p><p>${mission.summary}</p><button class="next-button" id="start-history-geo">Começar missão</button>`; document.querySelector('#start-history-geo').addEventListener('click', renderHistoryGeoQuestion); }
-    function renderHistoryGeoQuestion() { historyGeoAnswered = false; const mission = historyGeoMissions[historyGeoMissionIndex], question = mission.questions[historyGeoQuestionIndex], shuffledOptions = question.options.map((option, index) => ({ option, index })).sort(() => Math.random() - 0.5); historyGeoProgress.style.width = `${(historyGeoQuestionIndex / mission.questions.length) * 100}%`; historyGeoCard.innerHTML = `<p class="topic">${mission.name.toUpperCase()}</p><span class="question-number">${historyGeoQuestionIndex + 1} / ${mission.questions.length}</span><h2>${question.q}</h2><div class="answers">${shuffledOptions.map(({ option, index }, displayIndex) => `<button class="answer" data-history-geo-answer="${index}"><span class="answer-key">${String.fromCharCode(65 + displayIndex)}</span>${option}</button>`).join('')}</div><p class="feedback" id="history-geo-feedback"></p><button class="next-button hidden" id="history-geo-next">Próxima pergunta</button>`; historyGeoCard.querySelectorAll('.answer').forEach(button => button.addEventListener('click', () => chooseHistoryGeoAnswer(Number(button.dataset.historyGeoAnswer)))); }
+    function renderHistoryGeoQuestion() { historyGeoAnswered = false; const mission = historyGeoMissions[historyGeoMissionIndex], question = mission.questions[historyGeoQuestionIndex], shuffledOptions = question.options.map((option, index) => ({ option, index })).sort(() => Math.random() - 0.5); historyGeoProgress.style.width = `${(historyGeoQuestionIndex / mission.questions.length) * 100}%`; historyGeoCard.innerHTML = `<p class="topic">${mission.name.toUpperCase()}</p><span class="question-number">${historyGeoQuestionIndex + 1} / ${mission.questions.length}</span>${question.image ? `<img class="question-image" src="${question.image}" alt="${question.alt}">` : ''}<h2>${question.q}</h2><div class="answers">${shuffledOptions.map(({ option, index }, displayIndex) => `<button class="answer" data-history-geo-answer="${index}"><span class="answer-key">${String.fromCharCode(65 + displayIndex)}</span>${option}</button>`).join('')}</div><p class="feedback" id="history-geo-feedback"></p><button class="next-button hidden" id="history-geo-next">Próxima pergunta</button>`; historyGeoCard.querySelectorAll('.answer').forEach(button => button.addEventListener('click', () => chooseHistoryGeoAnswer(Number(button.dataset.historyGeoAnswer)))); }
     function chooseHistoryGeoAnswer(selected) { if (historyGeoAnswered) return; historyGeoAnswered = true; const question = historyGeoMissions[historyGeoMissionIndex].questions[historyGeoQuestionIndex], options = historyGeoCard.querySelectorAll('.answer'), feedback = document.querySelector('#history-geo-feedback'); options.forEach(option => { option.disabled = true; if (Number(option.dataset.historyGeoAnswer) === question.answer) option.classList.add('correct'); }); if (selected === question.answer) { historyGeoStars++; historyGeoStarDisplay.textContent = historyGeoStars; feedback.textContent = 'Acertou! Você ganhou uma estrela.'; feedback.className = 'feedback good'; } else { Array.from(options).find(option => Number(option.dataset.historyGeoAnswer) === selected).classList.add('wrong'); feedback.textContent = `Quase! ${question.tip}`; feedback.className = 'feedback bad'; } document.querySelector('#history-geo-next').classList.remove('hidden'); document.querySelector('#history-geo-next').addEventListener('click', nextHistoryGeoQuestion); }
     function nextHistoryGeoQuestion() { const mission = historyGeoMissions[historyGeoMissionIndex]; if (historyGeoQuestionIndex < mission.questions.length - 1) { historyGeoQuestionIndex++; renderHistoryGeoQuestion(); return; } if (historyGeoMissionIndex < historyGeoMissions.length - 1) { historyGeoMissionIndex++; historyGeoQuestionIndex = 0; renderHistoryGeoTabs(); renderHistoryGeoLesson(); return; } const total = historyGeoMissions.reduce((count, mission) => count + mission.questions.length, 0); historyGeoProgress.style.width = '100%'; historyGeoCard.innerHTML = `<div class="result"><div class="trophy">★</div><p class="topic">MISSÃO CONCLUÍDA</p><h2>Você explorou História e Geografia!</h2><p>Você conquistou ${historyGeoStars} de ${total} estrelas.</p><button class="restart-button" id="history-geo-restart">Jogar novamente</button></div>`; document.querySelector('#history-geo-restart').addEventListener('click', () => { historyGeoMissionIndex = 0; historyGeoQuestionIndex = 0; historyGeoStars = 0; historyGeoStarDisplay.textContent = historyGeoStars; renderHistoryGeoTabs(); renderHistoryGeoLesson(); }); }
+
+    // Mathematics module: four chapters with six questions each.
+    function mathPicture(label) {
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="520" height="90" viewBox="0 0 520 90"><rect width="520" height="90" rx="14" fill="#e8f4ff"/><text x="260" y="55" text-anchor="middle" font-family="Arial" font-size="22" fill="#234">${label}</text></svg>`)}`;
+    }
+
+    const mathMissions = [
+      { name: 'Números e Valor Posicional', summary: 'Leia números, reconheça o valor de cada algarismo e compare quantidades.', questions: [
+        { text: 'Qual é o valor do algarismo 7 em 7.245?', choices: ['7', '70', '700', '7.000'], answer: 3 },
+        { text: 'Qual número tem 5 centenas, 2 dezenas e 8 unidades?', choices: ['528', '582', '258', '825'], answer: 0 },
+        { text: 'Qual é a decomposição de 4.306?', choices: ['4.000 + 300 + 6', '400 + 30 + 6', '4.000 + 30 + 6', '4.000 + 300 + 60'], answer: 0, picture: mathPicture('4.306 = 4 milhares + 3 centenas + 6 unidades') },
+        { text: 'Qual número é maior?', choices: ['3.908', '3.890', '3.809', '3.098'], answer: 0 },
+        { text: 'Qual número vem imediatamente depois de 999?', choices: ['990', '1.000', '1.009', '999'], answer: 1 },
+        { text: 'Arredondando 367 para a dezena mais próxima, obtemos:', choices: ['300', '360', '370', '400'], answer: 2 }
+      ]},
+      { name: 'Adição e Subtração', summary: 'Calcule adições e subtrações e use essas operações para resolver situações do dia a dia.', questions: [
+        { text: 'Quanto é 248 + 135?', choices: ['373', '383', '393', '283'], answer: 1 },
+        { text: 'Quanto é 700 − 286?', choices: ['414', '424', '514', '404'], answer: 0 },
+        { text: 'Lia tinha 36 figurinhas e ganhou 18. Com quantas ficou?', choices: ['44', '48', '54', '64'], answer: 2, picture: mathPicture('36 + 18 = ?') },
+        { text: 'Uma biblioteca tinha 92 livros e emprestou 37. Quantos restaram?', choices: ['55', '65', '59', '45'], answer: 0 },
+        { text: 'Qual conta completa 425 + ___ = 600?', choices: ['165', '175', '185', '225'], answer: 1 },
+        { text: 'Pedro tinha R$ 50 e gastou R$ 27. Quanto sobrou?', choices: ['R$ 13', 'R$ 23', 'R$ 27', 'R$ 33'], answer: 1 }
+      ]},
+      { name: 'Multiplicação e Tabelas', summary: 'Use grupos iguais, fatos básicos e tabelas de multiplicação para encontrar produtos.', questions: [
+        { text: 'Quanto é 3 × 4?', choices: ['7', '12', '14', '16'], answer: 1 },
+        { text: 'Quanto é 6 × 5?', choices: ['11', '25', '30', '35'], answer: 2 },
+        { text: 'Há 4 caixas com 7 lápis em cada uma. Quantos lápis há?', choices: ['11', '21', '28', '32'], answer: 2, picture: mathPicture('4 grupos de 7 lápis = 28 lápis') },
+        { text: 'Qual é o resultado de 8 × 8?', choices: ['48', '56', '64', '72'], answer: 2 },
+        { text: 'Na tabuada do 9, qual número vem em 9 × 3?', choices: ['18', '21', '27', '36'], answer: 2 },
+        { text: 'Uma fila tem 5 crianças. Quantas crianças há em 6 filas iguais?', choices: ['11', '25', '30', '35'], answer: 2 }
+      ]},
+      { name: 'Tempo e Rotina', summary: 'Leia horas, compare durações e organize acontecimentos da rotina.', questions: [
+        { text: 'Quantos minutos há em 1 hora?', choices: ['30', '45', '60', '100'], answer: 2 },
+        { text: 'Se o recreio começa às 10h e dura 20 minutos, termina às:', choices: ['10h10', '10h20', '10h30', '11h'], answer: 1 },
+        { text: 'Que horas o relógio representa?', choices: ['3h', '6h', '9h', '12h'], answer: 0, picture: mathPicture('ponteiro curto no 3 e ponteiro longo no 12') },
+        { text: 'Qual atividade acontece primeiro em uma rotina escolar?', choices: ['Ir para casa', 'Aula da manhã', 'Jantar', 'Dormir'], answer: 1 },
+        { text: 'Quantas horas se passam das 14h às 17h?', choices: ['2 horas', '3 horas', '4 horas', '7 horas'], answer: 1 },
+        { text: 'Uma aula começa às 8h30 e termina às 9h15. Quanto dura?', choices: ['30 minutos', '45 minutos', '50 minutos', '1 hora'], answer: 1 }
+      ]}
+    ];
+    let mathMissionIndex = 0, mathQuestionIndex = 0, mathStars = 0;
+    const mathGame = document.querySelector('#math-game'), mathTabs = document.querySelector('#math-mission-tabs'), mathCard = document.querySelector('#math-question-card'), mathProgress = document.querySelector('#math-progress-fill'), mathStarDisplay = document.querySelector('#math-stars');
+    function renderMathTabs() { mathTabs.innerHTML = mathMissions.map((mission, index) => `<button class="mission-tab ${index === mathMissionIndex ? 'active' : ''}" data-math-mission="${index}">${mission.name}</button>`).join(''); mathTabs.querySelectorAll('button').forEach(button => button.addEventListener('click', () => { mathMissionIndex = Number(button.dataset.mathMission); mathQuestionIndex = 0; renderMathTabs(); renderMathLesson(); })); }
+    function renderMathLesson() { const mission = mathMissions[mathMissionIndex]; mathProgress.style.width = '0%'; mathCard.innerHTML = `<p class="topic">LEIA E APRENDA</p><h2>${mission.name}</h2><p class="feedback good">Resumo: ${mission.summary}</p><p>${mission.summary}</p><button class="next-button" id="start-math">Começar missão</button>`; document.querySelector('#start-math').addEventListener('click', renderMathQuestion); }
+    function renderMathQuestion() { const mission = mathMissions[mathMissionIndex], question = mission.questions[mathQuestionIndex], choices = question.choices.map((text, originalIndex) => ({ text, originalIndex })).sort(() => Math.random() - 0.5); mathProgress.style.width = `${(mathQuestionIndex / mission.questions.length) * 100}%`; mathCard.innerHTML = `<p class="topic">QUESTÃO ${mathQuestionIndex + 1} DE ${mission.questions.length}</p><h2>${question.text}</h2>${question.picture ? `<img class="question-picture" alt="Ilustração da questão" src="${question.picture}">` : ''}<div class="answers">${choices.map(choice => `<button class="answer-button" data-math-answer="${choice.originalIndex}">${choice.text}</button>`).join('')}</div><p class="feedback" id="math-feedback"></p>`; mathCard.querySelectorAll('.answer-button').forEach(button => button.addEventListener('click', () => { const feedback = document.querySelector('#math-feedback'), correct = Number(button.dataset.mathAnswer) === question.answer; mathCard.querySelectorAll('.answer-button').forEach(item => item.disabled = true); if (correct) { mathStars++; mathStarDisplay.textContent = mathStars; feedback.textContent = 'Muito bem! Você ganhou uma estrela.'; feedback.className = 'feedback good'; } else { feedback.textContent = `Quase! A resposta correta é ${question.choices[question.answer]}.`; feedback.className = 'feedback bad'; } const next = document.createElement('button'); next.className = 'next-button'; next.textContent = mathQuestionIndex < mission.questions.length - 1 ? 'Próxima questão' : 'Continuar'; next.addEventListener('click', nextMathQuestion); mathCard.appendChild(next); })); }
+    function nextMathQuestion() { const mission = mathMissions[mathMissionIndex]; if (mathQuestionIndex < mission.questions.length - 1) { mathQuestionIndex++; renderMathQuestion(); return; } if (mathMissionIndex < mathMissions.length - 1) { mathMissionIndex++; mathQuestionIndex = 0; renderMathTabs(); renderMathLesson(); return; } mathProgress.style.width = '100%'; mathCard.innerHTML = `<div class="result"><div class="trophy">★</div><p class="topic">MISSÃO CONCLUÍDA</p><h2>Você concluiu Matemática!</h2><p>Você conquistou ${mathStars} estrelas.</p><button class="restart-button" id="math-restart">Jogar novamente</button></div>`; document.querySelector('#math-restart').addEventListener('click', () => { mathMissionIndex = 0; mathQuestionIndex = 0; mathStars = 0; mathStarDisplay.textContent = mathStars; renderMathTabs(); renderMathLesson(); }); }
+    function initMath() { renderMathTabs(); renderMathLesson(); }
 
     const subjectSelector = document.querySelector('.subject-selector');
     const scienceGame = document.querySelector('#science-game');
@@ -863,6 +948,8 @@
     });
     document.querySelector('#back-home-history-geo').addEventListener('click', () => { subjectSelector.classList.remove('hidden-screen'); historyGeoGame.classList.add('hidden-screen'); });
 
+    document.querySelector('#open-math').addEventListener('click', () => { subjectFeedback.textContent = ''; subjectSelector.classList.add('hidden-screen'); mathGame.classList.remove('hidden-screen'); });
+    document.querySelector('#back-home-math').addEventListener('click', () => { subjectSelector.classList.remove('hidden-screen'); mathGame.classList.add('hidden-screen'); });
     renderTabs();
     renderQuestion();
     renderEnglishTabs();
@@ -871,6 +958,7 @@
     renderPortugueseLesson();
     renderHistoryGeoTabs();
     renderHistoryGeoLesson();
+    initMath();
   </script>
 </body>
 </html>

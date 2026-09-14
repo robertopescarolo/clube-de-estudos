@@ -177,6 +177,7 @@ h2 { margin: 10px 0 18px; font-size: clamp(29px, 5vw, 45px); line-height: 1.02; 
     <button class="subject-choice" id="open-english" type="button">Inglês</button>
     <button class="subject-choice" id="open-portuguese" type="button">Português</button>
     <button class="subject-choice" id="open-history-geo" type="button">História e Geografia</button>
+    <button class="subject-choice" id="open-math" type="button">Matemática</button>
     <p id="subject-feedback" aria-live="polite"></p>
   </section>
   <div class="game-shell hidden-screen" id="science-game">
@@ -231,6 +232,14 @@ h2 { margin: 10px 0 18px; font-size: clamp(29px, 5vw, 45px); line-height: 1.02; 
       <section class="question-card" id="history-geo-question-card" aria-live="polite"></section>
     </main>
   </div>
+
+  <section class="game-screen hidden-screen" id="math-game">
+    <button class="back-button" id="back-home-math" type="button">← Voltar aos assuntos</button>
+    <div class="game-header"><h1>Matemática</h1><div class="stars">★ <span id="math-stars">0</span></div></div>
+    <div class="mission-tabs" id="math-mission-tabs"></div>
+    <div class="progress-bar"><div class="progress-fill" id="math-progress-fill"></div></div>
+    <article class="question-card" id="math-question-card"></article>
+  </section>
 
   <script>
     const missions = [
@@ -743,6 +752,53 @@ h2 { margin: 10px 0 18px; font-size: clamp(29px, 5vw, 45px); line-height: 1.02; 
     function chooseHistoryGeoAnswer(selected) { if (historyGeoAnswered) return; historyGeoAnswered = true; const question = historyGeoMissions[historyGeoMissionIndex].questions[historyGeoQuestionIndex], options = historyGeoCard.querySelectorAll('.answer'), feedback = document.querySelector('#history-geo-feedback'); options.forEach(option => { option.disabled = true; if (Number(option.dataset.historyGeoAnswer) === question.answer) option.classList.add('correct'); }); if (selected === question.answer) { historyGeoStars++; historyGeoStarDisplay.textContent = historyGeoStars; feedback.textContent = 'Acertou! Você ganhou uma estrela.'; feedback.className = 'feedback good'; } else { Array.from(options).find(option => Number(option.dataset.historyGeoAnswer) === selected).classList.add('wrong'); feedback.textContent = `Quase! ${question.tip}`; feedback.className = 'feedback bad'; } document.querySelector('#history-geo-next').classList.remove('hidden'); document.querySelector('#history-geo-next').addEventListener('click', nextHistoryGeoQuestion); }
     function nextHistoryGeoQuestion() { const mission = historyGeoMissions[historyGeoMissionIndex]; if (historyGeoQuestionIndex < mission.questions.length - 1) { historyGeoQuestionIndex++; renderHistoryGeoQuestion(); return; } if (historyGeoMissionIndex < historyGeoMissions.length - 1) { historyGeoMissionIndex++; historyGeoQuestionIndex = 0; renderHistoryGeoTabs(); renderHistoryGeoLesson(); return; } const total = historyGeoMissions.reduce((count, mission) => count + mission.questions.length, 0); historyGeoProgress.style.width = '100%'; historyGeoCard.innerHTML = `<div class="result"><div class="trophy">★</div><p class="topic">MISSÃO CONCLUÍDA</p><h2>Você explorou História e Geografia!</h2><p>Você conquistou ${historyGeoStars} de ${total} estrelas.</p><button class="restart-button" id="history-geo-restart">Jogar novamente</button></div>`; document.querySelector('#history-geo-restart').addEventListener('click', () => { historyGeoMissionIndex = 0; historyGeoQuestionIndex = 0; historyGeoStars = 0; historyGeoStarDisplay.textContent = historyGeoStars; renderHistoryGeoTabs(); renderHistoryGeoLesson(); }); }
 
+    // Mathematics module: four chapters with six questions each.
+    function mathPicture(label) {
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="520" height="90" viewBox="0 0 520 90"><rect width="520" height="90" rx="14" fill="#e8f4ff"/><text x="260" y="55" text-anchor="middle" font-family="Arial" font-size="22" fill="#234">${label}</text></svg>`)}`;
+    }
+
+    const mathMissions = [
+      { name: 'Números e Valor Posicional', summary: 'Leia números, reconheça o valor de cada algarismo e compare quantidades.', questions: [
+        { text: 'Qual é o valor do algarismo 7 em 7.245?', choices: ['7', '70', '700', '7.000'], answer: 3 },
+        { text: 'Qual número tem 5 centenas, 2 dezenas e 8 unidades?', choices: ['528', '582', '258', '825'], answer: 0 },
+        { text: 'Qual é a decomposição de 4.306?', choices: ['4.000 + 300 + 6', '400 + 30 + 6', '4.000 + 30 + 6', '4.000 + 300 + 60'], answer: 0, picture: mathPicture('4.306 = 4 milhares + 3 centenas + 6 unidades') },
+        { text: 'Qual número é maior?', choices: ['3.908', '3.890', '3.809', '3.098'], answer: 0 },
+        { text: 'Qual número vem imediatamente depois de 999?', choices: ['990', '1.000', '1.009', '999'], answer: 1 },
+        { text: 'Arredondando 367 para a dezena mais próxima, obtemos:', choices: ['300', '360', '370', '400'], answer: 2 }
+      ]},
+      { name: 'Adição e Subtração', summary: 'Calcule adições e subtrações e use essas operações para resolver situações do dia a dia.', questions: [
+        { text: 'Quanto é 248 + 135?', choices: ['373', '383', '393', '283'], answer: 1 },
+        { text: 'Quanto é 700 − 286?', choices: ['414', '424', '514', '404'], answer: 0 },
+        { text: 'Lia tinha 36 figurinhas e ganhou 18. Com quantas ficou?', choices: ['44', '48', '54', '64'], answer: 2, picture: mathPicture('36 + 18 = ?') },
+        { text: 'Uma biblioteca tinha 92 livros e emprestou 37. Quantos restaram?', choices: ['55', '65', '59', '45'], answer: 0 },
+        { text: 'Qual conta completa 425 + ___ = 600?', choices: ['165', '175', '185', '225'], answer: 1 },
+        { text: 'Pedro tinha R$ 50 e gastou R$ 27. Quanto sobrou?', choices: ['R$ 13', 'R$ 23', 'R$ 27', 'R$ 33'], answer: 1 }
+      ]},
+      { name: 'Multiplicação e Tabelas', summary: 'Use grupos iguais, fatos básicos e tabelas de multiplicação para encontrar produtos.', questions: [
+        { text: 'Quanto é 3 × 4?', choices: ['7', '12', '14', '16'], answer: 1 },
+        { text: 'Quanto é 6 × 5?', choices: ['11', '25', '30', '35'], answer: 2 },
+        { text: 'Há 4 caixas com 7 lápis em cada uma. Quantos lápis há?', choices: ['11', '21', '28', '32'], answer: 2, picture: mathPicture('4 grupos de 7 lápis = 28 lápis') },
+        { text: 'Qual é o resultado de 8 × 8?', choices: ['48', '56', '64', '72'], answer: 2 },
+        { text: 'Na tabuada do 9, qual número vem em 9 × 3?', choices: ['18', '21', '27', '36'], answer: 2 },
+        { text: 'Uma fila tem 5 crianças. Quantas crianças há em 6 filas iguais?', choices: ['11', '25', '30', '35'], answer: 2 }
+      ]},
+      { name: 'Tempo e Rotina', summary: 'Leia horas, compare durações e organize acontecimentos da rotina.', questions: [
+        { text: 'Quantos minutos há em 1 hora?', choices: ['30', '45', '60', '100'], answer: 2 },
+        { text: 'Se o recreio começa às 10h e dura 20 minutos, termina às:', choices: ['10h10', '10h20', '10h30', '11h'], answer: 1 },
+        { text: 'Que horas o relógio representa?', choices: ['3h', '6h', '9h', '12h'], answer: 0, picture: mathPicture('ponteiro curto no 3 e ponteiro longo no 12') },
+        { text: 'Qual atividade acontece primeiro em uma rotina escolar?', choices: ['Ir para casa', 'Aula da manhã', 'Jantar', 'Dormir'], answer: 1 },
+        { text: 'Quantas horas se passam das 14h às 17h?', choices: ['2 horas', '3 horas', '4 horas', '7 horas'], answer: 1 },
+        { text: 'Uma aula começa às 8h30 e termina às 9h15. Quanto dura?', choices: ['30 minutos', '45 minutos', '50 minutos', '1 hora'], answer: 1 }
+      ]}
+    ];
+    let mathMissionIndex = 0, mathQuestionIndex = 0, mathStars = 0;
+    const mathGame = document.querySelector('#math-game'), mathTabs = document.querySelector('#math-mission-tabs'), mathCard = document.querySelector('#math-question-card'), mathProgress = document.querySelector('#math-progress-fill'), mathStarDisplay = document.querySelector('#math-stars');
+    function renderMathTabs() { mathTabs.innerHTML = mathMissions.map((mission, index) => `<button class="mission-tab ${index === mathMissionIndex ? 'active' : ''}" data-math-mission="${index}">${mission.name}</button>`).join(''); mathTabs.querySelectorAll('button').forEach(button => button.addEventListener('click', () => { mathMissionIndex = Number(button.dataset.mathMission); mathQuestionIndex = 0; renderMathTabs(); renderMathLesson(); })); }
+    function renderMathLesson() { const mission = mathMissions[mathMissionIndex]; mathProgress.style.width = '0%'; mathCard.innerHTML = `<p class="topic">LEIA E APRENDA</p><h2>${mission.name}</h2><p class="feedback good">Resumo: ${mission.summary}</p><p>${mission.summary}</p><button class="next-button" id="start-math">Começar missão</button>`; document.querySelector('#start-math').addEventListener('click', renderMathQuestion); }
+    function renderMathQuestion() { const mission = mathMissions[mathMissionIndex], question = mission.questions[mathQuestionIndex], choices = question.choices.map((text, originalIndex) => ({ text, originalIndex })).sort(() => Math.random() - 0.5); mathProgress.style.width = `${(mathQuestionIndex / mission.questions.length) * 100}%`; mathCard.innerHTML = `<p class="topic">QUESTÃO ${mathQuestionIndex + 1} DE ${mission.questions.length}</p><h2>${question.text}</h2>${question.picture ? `<img class="question-picture" alt="Ilustração da questão" src="${question.picture}">` : ''}<div class="answers">${choices.map(choice => `<button class="answer-button" data-math-answer="${choice.originalIndex}">${choice.text}</button>`).join('')}</div><p class="feedback" id="math-feedback"></p>`; mathCard.querySelectorAll('.answer-button').forEach(button => button.addEventListener('click', () => { const feedback = document.querySelector('#math-feedback'), correct = Number(button.dataset.mathAnswer) === question.answer; mathCard.querySelectorAll('.answer-button').forEach(item => item.disabled = true); if (correct) { mathStars++; mathStarDisplay.textContent = mathStars; feedback.textContent = 'Muito bem! Você ganhou uma estrela.'; feedback.className = 'feedback good'; } else { feedback.textContent = `Quase! A resposta correta é ${question.choices[question.answer]}.`; feedback.className = 'feedback bad'; } const next = document.createElement('button'); next.className = 'next-button'; next.textContent = mathQuestionIndex < mission.questions.length - 1 ? 'Próxima questão' : 'Continuar'; next.addEventListener('click', nextMathQuestion); mathCard.appendChild(next); })); }
+    function nextMathQuestion() { const mission = mathMissions[mathMissionIndex]; if (mathQuestionIndex < mission.questions.length - 1) { mathQuestionIndex++; renderMathQuestion(); return; } if (mathMissionIndex < mathMissions.length - 1) { mathMissionIndex++; mathQuestionIndex = 0; renderMathTabs(); renderMathLesson(); return; } mathProgress.style.width = '100%'; mathCard.innerHTML = `<div class="result"><div class="trophy">★</div><p class="topic">MISSÃO CONCLUÍDA</p><h2>Você concluiu Matemática!</h2><p>Você conquistou ${mathStars} estrelas.</p><button class="restart-button" id="math-restart">Jogar novamente</button></div>`; document.querySelector('#math-restart').addEventListener('click', () => { mathMissionIndex = 0; mathQuestionIndex = 0; mathStars = 0; mathStarDisplay.textContent = mathStars; renderMathTabs(); renderMathLesson(); }); }
+    function initMath() { renderMathTabs(); renderMathLesson(); }
+
     const subjectSelector = document.querySelector('.subject-selector');
     const scienceGame = document.querySelector('#science-game');
     const englishGame = document.querySelector('#english-game');
@@ -771,6 +827,8 @@ h2 { margin: 10px 0 18px; font-size: clamp(29px, 5vw, 45px); line-height: 1.02; 
     document.querySelector('#back-home-portuguese').addEventListener('click', () => { subjectSelector.classList.remove('hidden-screen'); portugueseGame.classList.add('hidden-screen'); });
     document.querySelector('#back-home-history-geo').addEventListener('click', () => { subjectSelector.classList.remove('hidden-screen'); historyGeoGame.classList.add('hidden-screen'); });
 
+    document.querySelector('#open-math').addEventListener('click', () => { subjectFeedback.textContent = ''; subjectSelector.classList.add('hidden-screen'); mathGame.classList.remove('hidden-screen'); });
+    document.querySelector('#back-home-math').addEventListener('click', () => { subjectSelector.classList.remove('hidden-screen'); mathGame.classList.add('hidden-screen'); });
     renderTabs();
     renderQuestion();
     renderEnglishTabs();
@@ -779,6 +837,7 @@ h2 { margin: 10px 0 18px; font-size: clamp(29px, 5vw, 45px); line-height: 1.02; 
     renderPortugueseLesson();
     renderHistoryGeoTabs();
     renderHistoryGeoLesson();
+    initMath();
   </script>
 </body>
 </html>
