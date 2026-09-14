@@ -682,8 +682,6 @@ let missionIndex = 0;
     };
 
     function englishScene(kind, title, label) {
-      if (englishReferencePhotos[kind]) return englishReferencePhotos[kind];
-      if (kind === 'mixture') return englishReferencePhotos.magnet;
       const scenes = {
         brick: '<rect x="115" y="110" width="410" height="150" fill="#b96b4c"/><path d="M115 160h410M115 210h410M185 110v50M315 110v50M445 110v50M250 160v50M380 160v50" stroke="#fff0c5" stroke-width="10"/>',
         gloves: '<path d="M217 257V132c0-16 21-16 21 0v57V96c0-16 22-16 22 0v88V82c0-16 22-16 22 0v102V99c0-16 22-16 22 0v88l20-38c10-17 33-3 22 15l-42 84c-15 30-87 34-87 9z" fill="#ffc835" stroke="#18304b" stroke-width="10"/>',
@@ -806,7 +804,7 @@ let englishMissionIndex = 0;
       const question = mission.questions[englishQuestionIndex];
       const shuffledOptions = question.options.map((option, index) => ({ option, index })).sort(() => Math.random() - 0.5);
       englishProgress.style.width = `${(englishQuestionIndex / mission.questions.length) * 100}%`;
-      englishCard.innerHTML = `<p class="topic">${mission.name.toUpperCase()}</p><span class="question-number">${englishQuestionIndex + 1} / ${mission.questions.length}</span><img class="question-image" src="${question.image}" alt="${question.alt}"><h2>${question.q}</h2><div class="answers">${shuffledOptions.map(({ option, index }, displayIndex) => `<button class="answer" data-english-answer="${index}"><span class="answer-key">${String.fromCharCode(65 + displayIndex)}</span>${option}</button>`).join('')}</div><p class="feedback" id="english-feedback"></p><button class="next-button hidden" id="english-next-button">Next question</button>`;
+      englishCard.innerHTML = `<p class="topic">${mission.name.toUpperCase()}</p><span class="question-number">${englishQuestionIndex + 1} / ${mission.questions.length}</span>${question.image ? `<img class="question-image" src="${question.image}" alt="${question.alt}">` : ''}<h2>${question.q}</h2><div class="answers">${shuffledOptions.map(({ option, index }, displayIndex) => `<button class="answer" data-english-answer="${index}"><span class="answer-key">${String.fromCharCode(65 + displayIndex)}</span>${option}</button>`).join('')}</div><p class="feedback" id="english-feedback"></p><button class="next-button hidden" id="english-next-button">Next question</button>`;
       englishCard.querySelectorAll('.answer').forEach(button => button.addEventListener('click', () => chooseEnglishAnswer(Number(button.dataset.englishAnswer))));
     }
 
