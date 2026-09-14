@@ -1141,6 +1141,20 @@ let historyGeoMissionIndex = 0, historyGeoQuestionIndex = 0, historyGeoStars = 0
       { text: 'Qual adição representa 5 grupos de 2?', choices: ['2 + 2 + 2 + 2 + 2', '5 + 5', '2 + 5', '5 + 2 + 5'], answer: 0, picture: mathPicture('5 grupos iguais de 2') },
       { text: 'De terça-feira até sexta-feira, quantos dias se passam?', choices: ['3 dias', '2 dias', '4 dias', '5 dias'], answer: 0, picture: mathPicture('Terça → Quarta → Quinta → Sexta') }
     ]});
+    mathMissions.push({ name: 'Mais exercícios do livro', summary: 'Pratique as mesmas ideias com novas situações: números, operações, problemas, dinheiro, divisão e calendário.', questions: [
+      { text: 'Qual é a decomposição de 572?', choices: ['500 + 70 + 2', '500 + 7 + 2', '50 + 70 + 2', '500 + 72'], answer: 0 },
+      { text: 'Qual é o valor do algarismo 8 em 684?', choices: ['8', '80', '800', '680'], answer: 1 },
+      { text: 'Calcule: 326 + 142 =', choices: ['458', '468', '478', '568'], answer: 1 },
+      { text: 'Calcule: 532 − 214 =', choices: ['308', '318', '328', '746'], answer: 1 },
+      { text: 'Complete: 275 + ___ = 400.', choices: ['115', '125', '135', '175'], answer: 1 },
+      { text: 'Uma caixa tem 6 lápis. Quantos lápis há em 4 caixas iguais?', choices: ['10', '18', '24', '30'], answer: 2, picture: mathPicture('4 grupos de 6 lápis = 24 lápis') },
+      { text: '24 figurinhas foram divididas igualmente entre 4 crianças. Quantas cada uma recebeu?', choices: ['4', '6', '8', '20'], answer: 1 },
+      { text: 'Uma aula começa às 9h20 e termina às 10h. Quanto tempo dura?', choices: ['20 minutos', '30 minutos', '40 minutos', '1 hora'], answer: 2 },
+      { text: 'De segunda-feira até quinta-feira, quantos dias se passam?', choices: ['2 dias', '3 dias', '4 dias', '5 dias'], answer: 1, picture: mathPicture('Segunda → Terça → Quarta → Quinta') },
+      { text: 'João tinha R$ 20,00 e gastou R$ 7,00. Quanto sobrou?', choices: ['R$ 12,00', 'R$ 13,00', 'R$ 27,00', 'R$ 3,00'], answer: 1 },
+      { text: 'Observe a sequência: 120, 130, 140, ___. Qual número vem depois?', choices: ['145', '150', '160', '220'], answer: 1 },
+      { text: 'Qual número é maior?', choices: ['405', '450', '4050', '45'], answer: 2 }
+    ]});
 
 let mathMissionIndex = 0, mathQuestionIndex = 0, mathStars = 0;
     const mathGame = document.querySelector('#math-game'), mathTabs = document.querySelector('#math-mission-tabs'), mathCard = document.querySelector('#math-question-card'), mathProgress = document.querySelector('#math-progress-fill'), mathStarDisplay = document.querySelector('#math-stars');
